@@ -83,7 +83,7 @@ type View struct {
 }
 
 func main() {
-	dsn := os.Getenv("TASKMATCH_DSN")
+	dsn := os.Getenv("MYSQL_URL")
 	if dsn == "" {
 		dsn = "root:@tcp(127.0.0.1:3306)/taskmatch?parseTime=true&charset=utf8mb4&loc=UTC"
 	}
