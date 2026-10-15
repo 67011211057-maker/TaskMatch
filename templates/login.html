@@ -1,0 +1,265 @@
+
+{{define "content"}}
+
+<!-- ================================== -->
+<!-- TASKMATCH LOGIN PAGE -->
+<!-- ================================== -->
+
+<section class="auth-section">
+
+    <div class="auth-container login-container">
+
+        <!-- ================================== -->
+        <!-- LOGIN HEADER -->
+        <!-- ================================== -->
+
+        <div class="auth-header">
+
+            <div class="auth-icon">
+                <span aria-hidden="true">🔐</span>
+            </div>
+
+            <h1>
+                เข้าสู่ระบบ TaskMatch
+            </h1>
+
+            <p class="auth-subtitle">
+                ยินดีต้อนรับกลับมา
+                เข้าสู่ระบบเพื่อจัดการงาน
+                และติดตามการสมัครงานของคุณ
+            </p>
+
+        </div>
+
+        <!-- ================================== -->
+        <!-- LOGIN FORM -->
+        <!-- ================================== -->
+
+        <form
+            action="/login"
+            method="post"
+            class="auth-form"
+            id="loginForm"
+        >
+
+            <!-- CSRF Token -->
+            <input
+                type="hidden"
+                name="csrf"
+                value="{{.CSRF}}"
+            >
+
+            <!-- ================================== -->
+            <!-- EMAIL -->
+            <!-- ================================== -->
+
+            <div class="form-group">
+
+                <label for="email">
+                    อีเมล
+                    <span class="required">*</span>
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="form-input"
+                    placeholder="example@email.com"
+                    maxlength="255"
+                    autocomplete="email"
+                    inputmode="email"
+                    autocapitalize="none"
+                    spellcheck="false"
+                    required
+                >
+
+                <small class="form-hint">
+                    กรอกอีเมลที่ใช้สมัครสมาชิก
+                </small>
+
+            </div>
+
+            <!-- ================================== -->
+            <!-- PASSWORD -->
+            <!-- ================================== -->
+
+            <div class="form-group">
+
+                <label for="password">
+                    รหัสผ่าน
+                    <span class="required">*</span>
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class="form-input password-input"
+                        placeholder="กรอกรหัสผ่าน"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <!-- Show / Hide Password -->
+                    <button
+                        type="button"
+                        class="toggle-password"
+                        data-toggle-password="password"
+                        aria-label="แสดงรหัสผ่าน"
+                        aria-pressed="false"
+                    >
+                        แสดง
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- ================================== -->
+            <!-- SUBMIT BUTTON -->
+            <!-- ================================== -->
+
+            <button
+                type="submit"
+                class="auth-submit-btn login-btn"
+            >
+                เข้าสู่ระบบ
+            </button>
+
+        </form>
+
+        <!-- ================================== -->
+        <!-- REGISTER LINK -->
+        <!-- ================================== -->
+
+        <div class="auth-footer">
+
+            <p>
+                ยังไม่มีบัญชี TaskMatch?
+
+                <a href="/register">
+                    สมัครสมาชิก
+                </a>
+            </p>
+
+        </div>
+
+        <!-- ================================== -->
+        <!-- BACK TO HOME -->
+        <!-- ================================== -->
+
+        <div class="auth-back">
+
+            <a
+                href="/"
+                class="back-home-link"
+            >
+                ← กลับไปหน้าตลาดงาน
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- ================================== -->
+    <!-- LOGIN INFORMATION -->
+    <!-- ================================== -->
+
+    <div class="auth-info">
+
+        <h2>
+            ยินดีต้อนรับสู่ TaskMatch
+        </h2>
+
+        <p class="auth-info-description">
+            แพลตฟอร์มจับคู่จ้างงานเล็ก ๆ
+            ที่ช่วยให้ผู้ว่าจ้างและผู้รับงาน
+            ติดต่อกันผ่านระบบประกาศงาน
+        </p>
+
+        <!-- CUSTOMER -->
+        <div class="auth-info-item">
+
+            <span
+                class="auth-info-icon"
+                aria-hidden="true"
+            >
+                ✓
+            </span>
+
+            <div>
+
+                <h3>
+                    สำหรับผู้ว่าจ้าง
+                </h3>
+
+                <p>
+                    ลงประกาศงาน
+                    ดูรายชื่อผู้สมัคร
+                    และเลือกผู้รับงานที่เหมาะสม
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- WORKER -->
+        <div class="auth-info-item">
+
+            <span
+                class="auth-info-icon"
+                aria-hidden="true"
+            >
+                ✓
+            </span>
+
+            <div>
+
+                <h3>
+                    สำหรับผู้รับงาน
+                </h3>
+
+                <p>
+                    ค้นหางานที่สนใจ
+                    สมัครรับงาน
+                    และติดตามสถานะใบสมัคร
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- SESSION INFORMATION -->
+        <div class="auth-info-item">
+
+            <span
+                class="auth-info-icon"
+                aria-hidden="true"
+            >
+                ✓
+            </span>
+
+            <div>
+
+                <h3>
+                    จดจำการเข้าสู่ระบบ
+                </h3>
+
+                <p>
+                    ระบบใช้ Session
+                    เพื่อให้คุณใช้งานต่อเนื่องได้
+                    โดยไม่ต้องเข้าสู่ระบบใหม่ทุกหน้า
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{{end}}

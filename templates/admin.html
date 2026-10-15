@@ -1,0 +1,523 @@
+
+{{define "content"}}
+
+<section class="admin-section container">
+
+    <!-- BACK NAVIGATION -->
+    <div class="page-navigation">
+        <a href="/" class="back-home-link">
+            ← กลับไปหน้าตลาดงาน
+        </a>
+    </div>
+
+    <!-- ADMIN HEADER -->
+    <div class="admin-header">
+
+        <div>
+            <h1>Admin Dashboard</h1>
+
+            <p class="subtitle">
+                ภาพรวมสมาชิก ประกาศงาน
+                และใบสมัครในระบบ TaskMatch
+            </p>
+        </div>
+
+        <span class="status-badge status-open">
+            ผู้ดูแลระบบ
+        </span>
+
+    </div>
+
+    <!-- DASHBOARD STATISTICS -->
+    <div class="admin-stats-grid">
+
+        <!-- สมาชิกทั้งหมด -->
+        <a class="admin-stat-card" href="#members">
+
+            <span class="admin-stat-label">
+                👥 สมาชิกทั้งหมด
+            </span>
+
+            <strong class="admin-stat-number">
+                {{index .Counts "users"}}
+            </strong>
+
+            <span class="admin-stat-description">
+                กดเพื่อดูข้อมูลสมาชิก ↓
+            </span>
+
+        </a>
+
+        <!-- ประกาศงานทั้งหมด -->
+        <a class="admin-stat-card" href="#jobs">
+
+            <span class="admin-stat-label">
+                📋 ประกาศงานทั้งหมด
+            </span>
+
+            <strong class="admin-stat-number">
+                {{index .Counts "jobs"}}
+            </strong>
+
+            <span class="admin-stat-description">
+                กดเพื่อดูข้อมูลประกาศงาน ↓
+            </span>
+
+        </a>
+
+        <!-- ใบสมัครทั้งหมด -->
+        <a class="admin-stat-card" href="#applications">
+
+            <span class="admin-stat-label">
+                📝 ใบสมัครทั้งหมด
+            </span>
+
+            <strong class="admin-stat-number">
+                {{index .Counts "applications"}}
+            </strong>
+
+            <span class="admin-stat-description">
+                กดเพื่อดูข้อมูลใบสมัคร ↓
+            </span>
+
+        </a>
+
+    </div>
+
+    <!-- JOB MANAGEMENT -->
+    <section class="admin-management" id="jobs">
+
+        <div class="section-header">
+
+            <div>
+                <h2>จัดการประกาศงาน</h2>
+
+                <p class="section-description">
+                    ตรวจสอบสถานะ อนุมัติ
+                    หรือไม่อนุมัติประกาศงาน
+                </p>
+            </div>
+
+        </div>
+
+        <div class="admin-table-wrapper">
+
+            <table class="admin-table">
+
+                <thead>
+                    <tr>
+                        <th>รหัสงาน</th>
+                        <th>ชื่องาน</th>
+                        <th>ผู้ว่าจ้าง</th>
+                        <th>ค่าจ้าง</th>
+                        <th>สถานะงาน</th>
+                        <th>สถานะอนุมัติ</th>
+                        <th>จัดการ</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {{range .Jobs}}
+
+                    <tr>
+
+                        <!-- รหัสงาน -->
+                        <td>
+                            #{{.ID}}
+                        </td>
+
+                        <!-- ชื่องาน -->
+                        <td>
+                            <a href="/jobs/{{.ID}}"
+                               class="admin-job-link">
+                                {{.Title}}
+                            </a>
+                        </td>
+
+                        <!-- ผู้ว่าจ้าง -->
+                        <td>
+                            {{.Owner}}
+                        </td>
+
+                        <!-- ค่าจ้าง -->
+                        <td>
+                            <strong class="admin-job-price">
+                                ฿{{.Price}}
+                            </strong>
+                        </td>
+
+                        <!-- สถานะงาน -->
+                        <td>
+
+                            {{if eq .Status "open"}}
+
+                                <span class="status-badge status-open">
+                                    เปิดรับสมัคร
+                                </span>
+
+                            {{else if eq .Status "assigned"}}
+
+                                <span class="status-badge status-assigned">
+                                    มีผู้รับงานแล้ว
+                                </span>
+
+                            {{else if eq .Status "completed"}}
+
+                                <span class="status-badge status-completed">
+                                    งานเสร็จสิ้น
+                                </span>
+
+                            {{else}}
+
+                                <span class="status-badge">
+                                    {{.Status}}
+                                </span>
+
+                            {{end}}
+
+                        </td>
+
+                        <!-- สถานะอนุมัติ -->
+                        <td>
+
+                            {{if eq .ApprovalStatus "approved"}}
+
+                                <span class="status-badge status-accepted">
+                                    อนุมัติแล้ว
+                                </span>
+
+                            {{else if eq .ApprovalStatus "pending"}}
+
+                                <span class="status-badge status-pending">
+                                    รออนุมัติ
+                                </span>
+
+                            {{else if eq .ApprovalStatus "rejected"}}
+
+                                <span class="status-badge status-rejected">
+                                    ไม่อนุมัติ
+                                </span>
+
+                            {{else}}
+
+                                <span class="status-badge">
+                                    {{.ApprovalStatus}}
+                                </span>
+
+                            {{end}}
+
+                        </td>
+
+                        <!-- จัดการประกาศ -->
+                        <td>
+
+                            <div class="admin-table-actions">
+
+                                <!-- ดูงาน -->
+                                <a href="/jobs/{{.ID}}"
+                                   class="secondary-btn btn-sm">
+                                    ดูงาน
+                                </a>
+
+                                <!-- เปลี่ยนสถานะเฉพาะงานที่ยังเปิดรับสมัคร -->
+                                {{if eq .Status "open"}}
+
+                                    <!-- รออนุมัติ -->
+                                    {{if eq .ApprovalStatus "pending"}}
+
+                                        <!-- อนุมัติ -->
+                                        <form method="post"
+                                              action="/admin/jobs/{{.ID}}/approve">
+
+                                            <input type="hidden"
+                                                   name="csrf"
+                                                   value="{{$.CSRF}}">
+
+                                            <button type="submit"
+                                                    class="accept-btn btn-sm"
+                                                    data-confirm="ยืนยันการอนุมัติประกาศงานนี้?">
+                                                อนุมัติ
+                                            </button>
+
+                                        </form>
+
+                                        <!-- ไม่อนุมัติ:
+                                             แสดงเมื่อยังไม่มีผู้สมัคร -->
+                                        {{if eq .ApplicantCount 0}}
+
+                                            <form method="post"
+                                                  action="/admin/jobs/{{.ID}}/reject">
+
+                                                <input type="hidden"
+                                                       name="csrf"
+                                                       value="{{$.CSRF}}">
+
+                                                <button type="submit"
+                                                        class="reject-btn btn-sm"
+                                                        data-confirm="ยืนยันการไม่อนุมัติประกาศงานนี้?">
+                                                    ไม่อนุมัติ
+                                                </button>
+
+                                            </form>
+
+                                        {{end}}
+
+                                    <!-- ไม่อนุมัติแล้ว -->
+                                    {{else if eq .ApprovalStatus "rejected"}}
+
+                                        <!-- อนุมัติใหม่ -->
+                                        <form method="post"
+                                              action="/admin/jobs/{{.ID}}/approve">
+
+                                            <input type="hidden"
+                                                   name="csrf"
+                                                   value="{{$.CSRF}}">
+
+                                            <button type="submit"
+                                                    class="accept-btn btn-sm"
+                                                    data-confirm="ยืนยันการอนุมัติประกาศงานนี้ใหม่?">
+                                                อนุมัติใหม่
+                                            </button>
+
+                                        </form>
+
+                                    {{end}}
+
+                                {{end}}
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {{else}}
+
+                    <tr>
+                        <td colspan="7">
+                            ยังไม่มีประกาศงานในระบบ
+                        </td>
+                    </tr>
+
+                    {{end}}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <!-- MEMBER MANAGEMENT -->
+    <section class="admin-management admin-management-spaced"
+             id="members">
+
+        <div class="section-header">
+
+            <div>
+                <h2>ข้อมูลสมาชิก</h2>
+
+                <p class="section-description">
+                    รายชื่อบัญชีสมาชิกที่ลงทะเบียนในระบบ
+                </p>
+            </div>
+
+        </div>
+
+        <div class="admin-table-wrapper">
+
+            <table class="admin-table">
+
+                <thead>
+                    <tr>
+                        <th>รหัสสมาชิก</th>
+                        <th>ชื่อสมาชิก</th>
+                        <th>อีเมล</th>
+                        <th>ประเภทบัญชี</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {{range .AdminMembers}}
+
+                    <tr>
+
+                        <td>
+                            #{{.ID}}
+                        </td>
+
+                        <td>
+                            {{.Name}}
+                        </td>
+
+                        <td>
+                            {{.Email}}
+                        </td>
+
+                        <td>
+
+                            {{if eq .Role "admin"}}
+                                ผู้ดูแลระบบ
+
+                            {{else if eq .Role "customer"}}
+                                ผู้ว่าจ้าง
+
+                            {{else if eq .Role "worker"}}
+                                ผู้รับงาน
+
+                            {{else}}
+                                {{.Role}}
+                            {{end}}
+
+                        </td>
+
+                    </tr>
+
+                    {{else}}
+
+                    <tr>
+                        <td colspan="4">
+                            ยังไม่มีข้อมูลสมาชิก
+                        </td>
+                    </tr>
+
+                    {{end}}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <!-- APPLICATION MANAGEMENT -->
+    <section class="admin-management admin-management-spaced"
+             id="applications">
+
+        <div class="section-header">
+
+            <div>
+                <h2>ข้อมูลใบสมัครงาน</h2>
+
+                <p class="section-description">
+                    รายการสมัครรับงานจากผู้ใช้งานในระบบ
+                </p>
+            </div>
+
+        </div>
+
+        <div class="admin-table-wrapper">
+
+            <table class="admin-table">
+
+                <thead>
+                    <tr>
+                        <th>รหัสใบสมัคร</th>
+                        <th>ประกาศงาน</th>
+                        <th>ผู้สมัคร</th>
+                        <th>วันที่สมัคร</th>
+                        <th>สถานะใบสมัคร</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {{range .AdminApplications}}
+
+                    <tr>
+
+                        <td>
+                            #{{.ID}}
+                        </td>
+
+                        <td>
+                            <a href="/jobs/{{.JobID}}">
+                                {{.JobTitle}}
+                            </a>
+                        </td>
+
+                        <td>
+                            {{.WorkerName}}
+                        </td>
+
+                        <td>
+                            {{.Created}}
+                        </td>
+
+                        <td>
+
+                            {{if eq .Status "pending"}}
+
+                                <span class="status-badge status-pending">
+                                    รอพิจารณา
+                                </span>
+
+                            {{else if eq .Status "accepted"}}
+
+                                <span class="status-badge status-accepted">
+                                    รับเข้าทำงาน
+                                </span>
+
+                            {{else if eq .Status "rejected"}}
+
+                                <span class="status-badge status-rejected">
+                                    ไม่ผ่านการคัดเลือก
+                                </span>
+
+                            {{else}}
+
+                                <span class="status-badge">
+                                    {{.Status}}
+                                </span>
+
+                            {{end}}
+
+                        </td>
+
+                    </tr>
+
+                    {{else}}
+
+                    <tr>
+                        <td colspan="5">
+                            ยังไม่มีข้อมูลใบสมัครงาน
+                        </td>
+                    </tr>
+
+                    {{end}}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <!-- ADMIN INFORMATION -->
+    <section class="admin-help">
+
+        <div class="help-banner">
+
+            <h2>
+                คำแนะนำสำหรับผู้ดูแลระบบ
+            </h2>
+
+            <p>
+                Admin สามารถตรวจสอบสมาชิก
+                ประกาศงาน และใบสมัคร
+                พร้อมอนุมัติหรือไม่อนุมัติประกาศงานได้
+                โดยไม่มีสิทธิ์ลบประกาศงาน
+            </p>
+
+        </div>
+
+    </section>
+
+</section>
+
+{{end}}

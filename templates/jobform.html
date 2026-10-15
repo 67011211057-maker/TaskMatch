@@ -1,0 +1,501 @@
+
+{{define "content"}}
+
+<!-- ===================================== -->
+<!-- CREATE / EDIT JOB FORM -->
+<!-- ===================================== -->
+
+<section class="job-form-section">
+
+    <!-- กลับไปหน้าที่เกี่ยวข้อง -->
+    <div class="page-navigation">
+
+        {{if .IsEdit}}
+
+            <a href="/jobs/{{.Job.ID}}"
+               class="back-home-link">
+                ← กลับไปหน้ารายละเอียดงาน
+            </a>
+
+        {{else}}
+
+            <a href="/my/jobs"
+               class="back-home-link">
+                ← กลับไปงานของฉัน
+            </a>
+
+        {{end}}
+
+    </div>
+
+    <!-- ===================================== -->
+    <!-- PAGE HEADER -->
+    <!-- ===================================== -->
+
+    <div class="job-form-header">
+
+        <span class="hero-badge">
+            TaskMatch
+        </span>
+
+        {{if .IsEdit}}
+
+            <h1>
+                แก้ไขประกาศงาน
+            </h1>
+
+            <p class="subtitle">
+                ปรับปรุงรายละเอียดประกาศงาน
+                เพื่อให้ผู้รับงานเข้าใจความต้องการของคุณ
+            </p>
+
+        {{else}}
+
+            <h1>
+                ลงประกาศงานใหม่
+            </h1>
+
+            <p class="subtitle">
+                บอกรายละเอียดงานที่ต้องการจ้าง
+                เพื่อค้นหาผู้รับงานที่เหมาะสม
+            </p>
+
+        {{end}}
+
+    </div>
+
+    <!-- ===================================== -->
+    <!-- JOB FORM LAYOUT -->
+    <!-- ===================================== -->
+
+    <div class="job-form-layout">
+
+        <div class="job-form-main">
+
+            <!-- ===================================== -->
+            <!-- FORM -->
+            <!-- ===================================== -->
+
+            <form
+                {{if .IsEdit}}
+                    action="/jobs/{{.Job.ID}}/edit"
+                {{else}}
+                    action="/jobs/new"
+                {{end}}
+                method="post"
+                class="job-form"
+                id="jobForm"
+            >
+
+                <!-- CSRF Token -->
+                <input
+                    type="hidden"
+                    name="csrf"
+                    value="{{.CSRF}}"
+                >
+
+                <!-- ===================================== -->
+                <!-- BASIC INFORMATION -->
+                <!-- ===================================== -->
+
+                <div class="form-card">
+
+                    <div class="form-card-header">
+
+                        <span class="form-step">
+                            01
+                        </span>
+
+                        <div>
+
+                            <h2>
+                                ข้อมูลประกาศงาน
+                            </h2>
+
+                            <p>
+                                ระบุชื่องานและหมวดหมู่ให้ชัดเจน
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ชื่องาน -->
+                    <div class="form-group">
+
+                        <label for="title">
+                            ชื่องาน
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            class="form-input"
+                            placeholder="เช่น ออกแบบโปสเตอร์ร้านกาแฟ"
+                            value="{{.Job.Title}}"
+                            maxlength="200"
+                            required
+                        >
+
+                        <small class="form-hint">
+                            ตั้งชื่อสั้น ๆ ที่อธิบายงานได้ชัดเจน
+                            ไม่เกิน 200 ตัวอักษร
+                        </small>
+
+                    </div>
+
+                    <!-- หมวดหมู่งาน -->
+                    <div class="form-group">
+
+                        <label for="category_id">
+                            หมวดหมู่งาน
+                            <span class="required">*</span>
+                        </label>
+
+                        <select
+                            id="category_id"
+                            name="category_id"
+                            class="form-input form-select"
+                            required
+                        >
+
+                            <option value="">
+                                -- เลือกหมวดหมู่งาน --
+                            </option>
+
+                            {{range .Categories}}
+
+                                <option
+                                    value="{{.ID}}"
+                                    {{if eq .ID $.Job.CategoryID}}
+                                        selected
+                                    {{end}}
+                                >
+                                    {{.Name}}
+                                </option>
+
+                            {{end}}
+
+                        </select>
+
+                        <small class="form-hint">
+                            เลือกหมวดหมู่ที่ตรงกับลักษณะงาน
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <!-- ===================================== -->
+                <!-- JOB DESCRIPTION -->
+                <!-- ===================================== -->
+
+                <div class="form-card">
+
+                    <div class="form-card-header">
+
+                        <span class="form-step">
+                            02
+                        </span>
+
+                        <div>
+
+                            <h2>
+                                รายละเอียดงาน
+                            </h2>
+
+                            <p>
+                                อธิบายสิ่งที่ต้องการให้ผู้รับงานทำ
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="description">
+                            รายละเอียดงาน
+                            <span class="required">*</span>
+                        </label>
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            class="form-input form-textarea"
+                            rows="8"
+                            maxlength="10000"
+                            placeholder="ตัวอย่าง:
+ต้องการออกแบบโปสเตอร์ร้านกาแฟขนาด A4
+ใช้โทนสีอบอุ่น
+ส่งไฟล์เป็น PNG และ PDF
+สามารถแก้ไขงานได้ 2 ครั้ง"
+                            required
+                        >{{.Job.Description}}</textarea>
+
+                        <small class="form-hint">
+                            แนะนำให้ระบุขอบเขตงาน
+                            รูปแบบไฟล์ และผลลัพธ์ที่ต้องการ
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <!-- ===================================== -->
+                <!-- PRICE AND DEADLINE -->
+                <!-- ===================================== -->
+
+                <div class="form-card">
+
+                    <div class="form-card-header">
+
+                        <span class="form-step">
+                            03
+                        </span>
+
+                        <div>
+
+                            <h2>
+                                ค่าจ้างและกำหนดส่ง
+                            </h2>
+
+                            <p>
+                                ระบุงบประมาณและวันที่ต้องการรับงาน
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ราคา -->
+                    <div class="form-group">
+
+                        <label for="price">
+                            ค่าจ้าง (บาท)
+                            <span class="required">*</span>
+                        </label>
+
+                        <div class="input-with-prefix">
+
+                            <span class="input-prefix">
+                                ฿
+                            </span>
+
+                            <input
+                                type="number"
+                                id="price"
+                                name="price"
+                                class="form-input"
+                                placeholder="เช่น 500"
+                                value="{{.Job.Price}}"
+                                min="0"
+                                max="99999999.99"
+                                step="0.01"
+                                inputmode="decimal"
+                                required
+                            >
+
+                        </div>
+
+                        <small class="form-hint">
+                            กำหนดค่าจ้างเป็นเงินบาท
+                            ไม่เกิน 99,999,999.99 บาท
+                        </small>
+
+                    </div>
+
+                    <!-- กำหนดส่งงาน -->
+                    <div class="form-group">
+
+                        <label for="deadline">
+                            กำหนดส่งงาน
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="date"
+                            id="deadline"
+                            name="deadline"
+                            class="form-input"
+                            value="{{.Job.Deadline}}"
+                            required
+                        >
+
+                        <small class="form-hint">
+                            เลือกวันนี้หรือวันที่ในอนาคต
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <!-- ===================================== -->
+                <!-- APPROVAL INFORMATION -->
+                <!-- ===================================== -->
+
+                <div class="job-form-note">
+
+                    <h3>
+                        การตรวจสอบประกาศงาน
+                    </h3>
+
+                    {{if .IsEdit}}
+
+                        <p>
+                            หลังจากบันทึกการแก้ไข
+                            ประกาศงานจะกลับเข้าสู่สถานะ
+                            รอแอดมินอนุมัติอีกครั้ง
+                        </p>
+
+                    {{else}}
+
+                        <p>
+                            หลังจากลงประกาศงาน
+                            ระบบจะส่งประกาศให้แอดมินตรวจสอบ
+                            ก่อนเปิดให้ผู้รับงานสมัคร
+                        </p>
+
+                    {{end}}
+
+                </div>
+
+                <!-- ===================================== -->
+                <!-- FORM ACTIONS -->
+                <!-- ===================================== -->
+
+                <div class="job-form-actions">
+
+                    {{if .IsEdit}}
+
+                        <button
+                            type="submit"
+                            class="auth-submit-btn"
+                        >
+                            บันทึกการแก้ไข
+                        </button>
+
+                        <a
+                            href="/jobs/{{.Job.ID}}"
+                            class="secondary-btn"
+                        >
+                            ยกเลิก
+                        </a>
+
+                    {{else}}
+
+                        <button
+                            type="submit"
+                            class="auth-submit-btn"
+                        >
+                            ลงประกาศงาน
+                        </button>
+
+                        <a
+                            href="/my/jobs"
+                            class="secondary-btn"
+                        >
+                            ยกเลิก
+                        </a>
+
+                    {{end}}
+
+                </div>
+
+            </form>
+
+        </div>
+
+        <!-- ===================================== -->
+        <!-- SIDEBAR INFORMATION -->
+        <!-- ===================================== -->
+
+        <aside class="job-form-sidebar">
+
+            <div class="job-form-help-card">
+
+                <h2>
+                    💡 เคล็ดลับการลงประกาศ
+                </h2>
+
+                <div class="help-item">
+
+                    <h3>
+                        1. ตั้งชื่องานให้ชัดเจน
+                    </h3>
+
+                    <p>
+                        ใช้ชื่อที่บอกได้ทันทีว่า
+                        ต้องการให้ผู้รับงานทำอะไร
+                    </p>
+
+                </div>
+
+                <div class="help-item">
+
+                    <h3>
+                        2. อธิบายรายละเอียดให้ครบ
+                    </h3>
+
+                    <p>
+                        ระบุขอบเขตงาน
+                        ความต้องการ และรูปแบบผลลัพธ์
+                    </p>
+
+                </div>
+
+                <div class="help-item">
+
+                    <h3>
+                        3. กำหนดค่าจ้างที่เหมาะสม
+                    </h3>
+
+                    <p>
+                        เลือกงบประมาณให้สอดคล้อง
+                        กับปริมาณและความยากของงาน
+                    </p>
+
+                </div>
+
+                <div class="help-item">
+
+                    <h3>
+                        4. ระบุกำหนดส่งที่เป็นไปได้
+                    </h3>
+
+                    <p>
+                        เผื่อเวลาให้ผู้รับงาน
+                        สามารถดำเนินงานได้อย่างเหมาะสม
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- ข้อมูลสำหรับการแก้ไขงาน -->
+            {{if .IsEdit}}
+
+                <div class="job-form-note">
+
+                    <h3>
+                        หมายเหตุ
+                    </h3>
+
+                    <p>
+                        ระบบอนุญาตให้แก้ไขประกาศ
+                        เฉพาะงานที่ยังเปิดรับสมัครเท่านั้น
+                    </p>
+
+                </div>
+
+            {{end}}
+
+        </aside>
+
+    </div>
+
+</section>
+
+{{end}}

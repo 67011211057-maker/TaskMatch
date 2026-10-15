@@ -1,0 +1,286 @@
+
+{{define "content"}}
+
+<section class="tm-edit-profile-page">
+
+    <!-- PAGE HEADER -->
+    <div class="tm-edit-profile-heading">
+        <a href="/profile" class="tm-edit-back-link">
+            ← กลับไปหน้าโปรไฟล์
+        </a>
+
+        <div class="tm-edit-heading-row">
+            <div class="tm-edit-heading-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="1.8"
+                     stroke-linecap="round"
+                     stroke-linejoin="round">
+                    <circle cx="10" cy="8" r="4"/>
+                    <path d="M3 21a7 7 0 0 1 12-5"/>
+                    <path d="m16 19 4-4 2 2-4 4-3 1z"/>
+                </svg>
+            </div>
+
+            <div>
+                <h1>แก้ไขข้อมูลส่วนตัว</h1>
+                <p>
+                    จัดการข้อมูลโปรไฟล์ของคุณ
+                    เพื่อให้สมาชิกคนอื่นรู้จักคุณมากขึ้น
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CARD -->
+    <div class="tm-edit-profile-card">
+
+        <!-- ACCOUNT INFORMATION -->
+        <div class="tm-edit-section">
+            <div class="tm-edit-section-title">
+                <span class="tm-edit-section-number">01</span>
+                <div>
+                    <h2>ข้อมูลบัญชี</h2>
+                    <p>ข้อมูลพื้นฐานจากบัญชีที่คุณสมัครไว้</p>
+                </div>
+            </div>
+
+            <div class="tm-edit-account-grid">
+                <div class="tm-edit-profile-form-field">
+                    <label>ชื่อสมาชิก</label>
+                    <div class="tm-edit-readonly">
+                        {{.Profile.Name}}
+                    </div>
+                </div>
+
+                <div class="tm-edit-profile-form-field">
+                    <label>ประเภทบัญชี</label>
+                    <div class="tm-edit-readonly">
+                        {{if eq .Profile.Role "customer"}}
+                            ผู้ว่าจ้าง
+                        {{else if eq .Profile.Role "worker"}}
+                            ผู้รับงาน
+                        {{else if eq .Profile.Role "admin"}}
+                            ผู้ดูแลระบบ
+                        {{else}}
+                            สมาชิก
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+
+            <p class="tm-edit-note">
+                ชื่อสมาชิกและประเภทบัญชีไม่สามารถแก้ไขผ่านหน้านี้ได้
+            </p>
+        </div>
+
+        <form
+            action="/profile/edit"
+            method="post"
+            id="profileEditForm"
+        >
+
+            <!-- CSRF PROTECTION -->
+            <input
+                type="hidden"
+                name="csrf"
+                value="{{.CSRF}}"
+            >
+
+            <!-- PERSONAL INFORMATION -->
+            <div class="tm-edit-section">
+                <div class="tm-edit-section-title">
+                    <span class="tm-edit-section-number">02</span>
+                    <div>
+                        <h2>ข้อมูลส่วนตัวและการติดต่อ</h2>
+                        <p>ระบุอาชีพและพื้นที่ที่คุณอยู่</p>
+                    </div>
+                </div>
+
+                <div class="tm-edit-form-grid">
+
+                    <div class="tm-edit-profile-form-field">
+                        <label for="occupation">
+                            อาชีพปัจจุบัน
+                        </label>
+
+                        <input
+                            type="text"
+                            id="occupation"
+                            name="occupation"
+                            maxlength="150"
+                            placeholder="เช่น นักออกแบบกราฟิก"
+                            autocomplete="organization-title"
+                            value="{{.Profile.Occupation}}"
+                        >
+
+                        <p class="tm-edit-field-hint">
+                            ระบุอาชีพหรือสายงานที่คุณทำอยู่
+                        </p>
+                    </div>
+
+                    <div class="tm-edit-profile-form-field">
+                        <label for="phone">
+                            เบอร์โทรศัพท์
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            maxlength="20"
+                            placeholder="เช่น 0812345678"
+                            autocomplete="tel"
+                            inputmode="tel"
+                            value="{{.Profile.Phone}}"
+                            aria-describedby="phonePrivacyHint"
+                        >
+
+                        <p
+                            class="tm-edit-field-hint"
+                            id="phonePrivacyHint"
+                        >
+                            เบอร์โทรศัพท์ไม่แสดงในหน้าโปรไฟล์สาธารณะ
+                        </p>
+                    </div>
+
+                    <div class="tm-edit-profile-form-field">
+                        <label for="province">
+                            จังหวัด
+                        </label>
+
+                        <input
+                            type="text"
+                            id="province"
+                            name="province"
+                            maxlength="100"
+                            placeholder="เช่น มหาสารคาม"
+                            autocomplete="address-level1"
+                            value="{{.Profile.Province}}"
+                        >
+                    </div>
+
+                    <div class="tm-edit-profile-form-field">
+                        <label for="district">
+                            อำเภอ
+                        </label>
+
+                        <input
+                            type="text"
+                            id="district"
+                            name="district"
+                            maxlength="100"
+                            placeholder="เช่น บรบือ"
+                            autocomplete="address-level2"
+                            value="{{.Profile.District}}"
+                        >
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SKILLS: WORKER ONLY -->
+            {{if eq .Profile.Role "worker"}}
+
+                <div class="tm-edit-section">
+                    <div class="tm-edit-section-title">
+                        <span class="tm-edit-section-number">03</span>
+                        <div>
+                            <h2>ทักษะและความถนัด</h2>
+                            <p>
+                                บอกผู้ว่าจ้างว่าคุณสามารถรับงานประเภทใดได้บ้าง
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="tm-edit-profile-form-field">
+                        <label for="skills">
+                            ทักษะ / ความถนัด
+                        </label>
+
+                        <textarea
+                            id="skills"
+                            name="skills"
+                            rows="4"
+                            maxlength="255"
+                            placeholder="เช่น ออกแบบโลโก้, ตัดต่อวิดีโอ, เขียนโปรแกรม"
+                        >{{.Profile.Skills}}</textarea>
+
+                        <p class="tm-edit-field-hint">
+                            ระบุทักษะที่เกี่ยวข้องกับงานที่คุณต้องการรับ
+                        </p>
+                    </div>
+                </div>
+
+            {{end}}
+
+            <!-- BIOGRAPHY -->
+            <div class="tm-edit-section">
+                <div class="tm-edit-section-title">
+                    <span class="tm-edit-section-number">
+                        {{if eq .Profile.Role "worker"}}04{{else}}03{{end}}
+                    </span>
+                    <div>
+                        <h2>แนะนำตัวเอง</h2>
+                        <p>
+                            เขียนเกี่ยวกับตัวคุณ ประสบการณ์
+                            หรือประเภทงานที่สนใจ
+                        </p>
+                    </div>
+                </div>
+
+                <div class="tm-edit-profile-form-field">
+                    <label for="bio">
+                        ข้อความแนะนำตัว
+                    </label>
+
+                    <textarea
+                        id="bio"
+                        name="bio"
+                        rows="5"
+                        maxlength="1000"
+                        placeholder="สวัสดีครับ/ค่ะ ฉันมีประสบการณ์ด้าน..."
+                    >{{.Profile.Bio}}</textarea>
+
+                    <p class="tm-edit-field-hint">
+                        ข้อความนี้จะแสดงในหน้าโปรไฟล์ของคุณ
+                    </p>
+                </div>
+            </div>
+
+            <!-- FORM ACTIONS -->
+            <div class="tm-edit-form-actions">
+                <a
+                    href="/profile"
+                    class="tm-edit-cancel-btn"
+                >
+                    ยกเลิก
+                </a>
+
+                <button
+                    type="submit"
+                    class="tm-edit-save-btn"
+                >
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round"
+                         aria-hidden="true">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                        <path d="M17 21v-8H7v8"/>
+                        <path d="M7 3v5h8"/>
+                    </svg>
+
+                    บันทึกข้อมูล
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</section>
+
+{{end}}

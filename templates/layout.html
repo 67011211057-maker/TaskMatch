@@ -1,0 +1,268 @@
+
+{{define "layout"}}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{.Title}} | TaskMatch</title>
+
+    <meta name="description"
+          content="TaskMatch ระบบจับคู่จ้างงานเล็ก ๆ สำหรับผู้ว่าจ้างและผู้รับงาน">
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="/static/js/script.js" defer></script>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="tm-navbar tm-navbar-modern">
+        <div class="tm-nav-container">
+
+            <!-- BRAND -->
+            <a href="/" class="tm-logo tm-logo-modern">
+                <svg class="tm-brand-icon"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     aria-hidden="true">
+                    <rect x="3" y="7" width="18" height="14" rx="2"/>
+                    <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    <path d="M3 12c5 3 13 3 18 0"/>
+                    <path d="M10 13h4"/>
+                </svg>
+
+                <span>
+                    Task<span class="tm-brand-accent">Match</span>
+                </span>
+            </a>
+
+            <!-- NAVIGATION -->
+            <nav class="tm-nav-links" aria-label="เมนูหลัก">
+
+                <a href="/" class="tm-nav-link tm-nav-item">
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round"
+                         aria-hidden="true">
+                        <path d="m3 10 9-7 9 7"/>
+                        <path d="M5 9v12h14V9"/>
+                        <path d="M9 21v-7h6v7"/>
+                    </svg>
+                    <span>ตลาดงาน</span>
+                </a>
+
+                {{if .User}}
+
+                    {{if eq .User.Role "customer"}}
+                        <a href="/my/jobs"
+                           class="tm-nav-link tm-nav-item">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 aria-hidden="true">
+                                <rect x="4" y="3" width="16" height="18" rx="2"/>
+                                <path d="M8 8h8M8 12h8M8 16h5"/>
+                            </svg>
+                            <span>งานของฉัน</span>
+                        </a>
+
+                    {{else if eq .User.Role "worker"}}
+                        <a href="/my/applications"
+                           class="tm-nav-link tm-nav-item">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 aria-hidden="true">
+                                <rect x="4" y="3" width="16" height="18" rx="2"/>
+                                <path d="M8 8h8M8 12h8M8 16h5"/>
+                            </svg>
+                            <span>งานที่ฉันสมัคร</span>
+                        </a>
+
+                    {{else if eq .User.Role "admin"}}
+                        <a href="/admin"
+                           class="tm-nav-link tm-nav-item">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 aria-hidden="true">
+                                <rect x="3" y="4" width="18" height="16" rx="2"/>
+                                <path d="M3 10h18M9 10v10"/>
+                            </svg>
+                            <span>จัดการระบบ</span>
+                        </a>
+                    {{end}}
+
+                {{else}}
+
+                    <a href="/login"
+                       class="tm-nav-link tm-nav-item">
+                        <span>เข้าสู่ระบบ</span>
+                    </a>
+
+                {{end}}
+
+            </nav>
+
+            <!-- RIGHT SIDE -->
+            <div class="tm-nav-right tm-nav-account">
+
+                {{if .User}}
+
+                    <!-- PROFILE PILL -->
+                    <a href="/profile"
+                       class="tm-account-info tm-profile-pill"
+                       aria-label="เปิดโปรไฟล์ของ {{.User.Name}}">
+
+                        <!-- AVATAR -->
+                        <span class="tm-account-avatar tm-profile-pill-avatar"
+                              aria-hidden="true">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.8"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round">
+                                <circle cx="12" cy="8" r="4"/>
+                                <path d="M4 21a8 8 0 0 1 16 0"/>
+                            </svg>
+                        </span>
+
+                        <!-- NAME AND ROLE -->
+                        <span class="tm-account-details tm-profile-pill-details">
+
+                            <span class="tm-account-name tm-profile-pill-name">
+                                {{.User.Name}}
+                            </span>
+
+                            <span class="tm-account-role tm-profile-pill-role">
+                                {{if eq .User.Role "customer"}}
+                                    ผู้ว่าจ้าง
+                                {{else if eq .User.Role "worker"}}
+                                    ผู้รับงาน
+                                {{else if eq .User.Role "admin"}}
+                                    ผู้ดูแลระบบ
+                                {{end}}
+                            </span>
+
+                        </span>
+
+                        <!-- ARROW -->
+                        <svg class="tm-profile-pill-arrow"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             aria-hidden="true">
+                            <path d="m9 18 6-6-6-6"/>
+                        </svg>
+
+                    </a>
+
+                    {{if eq .User.Role "customer"}}
+                        <a href="/jobs/new"
+                           class="tm-post-btn tm-modern-post-btn">
+                            + ประกาศงาน
+                        </a>
+                    {{end}}
+
+                    <!-- LOGOUT -->
+                    <form method="post"
+                          action="/logout"
+                          class="tm-logout-form">
+
+                        <input type="hidden"
+                               name="csrf"
+                               value="{{.CSRF}}">
+
+                        <button type="submit"
+                                class="tm-logout-btn tm-modern-logout-btn">
+                            <svg viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 aria-hidden="true">
+                                <path d="M10 17l5-5-5-5"/>
+                                <path d="M15 12H3"/>
+                                <path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7"/>
+                            </svg>
+                            <span>ออกจากระบบ</span>
+                        </button>
+                    </form>
+
+                {{else}}
+
+                    <a href="/register"
+                       class="tm-post-btn tm-modern-post-btn">
+                        สมัครสมาชิก
+                    </a>
+
+                {{end}}
+
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="container">
+
+        {{if .Notice}}
+            <div class="alert alert-success" role="status">
+                {{.Notice}}
+            </div>
+        {{end}}
+
+        {{if .Error}}
+            <div class="alert alert-error" role="alert">
+                {{.Error}}
+            </div>
+        {{end}}
+
+        {{template "content" .}}
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+
+            <p class="footer-brand">TaskMatch</p>
+
+            <p>
+                ระบบจับคู่จ้างงานเล็ก ๆ
+                เชื่อมต่อผู้ว่าจ้างกับผู้รับงาน
+            </p>
+
+            <p class="footer-copy">
+                &copy; 2026 TaskMatch.
+                All rights reserved.
+            </p>
+
+        </div>
+    </footer>
+
+</body>
+</html>
+{{end}}

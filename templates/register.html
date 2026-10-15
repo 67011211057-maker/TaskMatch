@@ -1,0 +1,429 @@
+
+{{define "content"}}
+
+<!-- ================================== -->
+<!-- TASKMATCH REGISTER PAGE -->
+<!-- ================================== -->
+
+<section class="auth-section">
+
+    <div class="auth-container register-container">
+
+        <!-- ================================== -->
+        <!-- REGISTER HEADER -->
+        <!-- ================================== -->
+
+        <div class="auth-header">
+
+            <div class="auth-icon">
+                <span aria-hidden="true">👤</span>
+            </div>
+
+            <h1>
+                สร้างบัญชี TaskMatch
+            </h1>
+
+            <p class="auth-subtitle">
+                สมัครสมาชิกเพื่อเริ่มต้นจ้างงาน
+                หรือค้นหางานที่เหมาะกับคุณ
+            </p>
+
+        </div>
+
+        <!-- ================================== -->
+        <!-- REGISTER FORM -->
+        <!-- ================================== -->
+
+        <form
+            action="/register"
+            method="post"
+            class="auth-form"
+            id="registerForm"
+        >
+
+            <!-- CSRF Token -->
+            <input
+                type="hidden"
+                name="csrf"
+                value="{{.CSRF}}"
+            >
+
+            <!-- ================================== -->
+            <!-- USER NAME -->
+            <!-- ================================== -->
+
+            <div class="form-group">
+
+                <label for="name">
+                    ชื่อผู้ใช้งาน
+                    <span class="required">*</span>
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    class="form-input"
+                    placeholder="กรอกชื่อของคุณ"
+                    maxlength="100"
+                    autocomplete="name"
+                    required
+                >
+
+                <small class="form-hint">
+                    ใช้ชื่อจริงหรือชื่อที่ต้องการให้แสดงบนเว็บไซต์
+                </small>
+
+            </div>
+
+            <!-- ================================== -->
+            <!-- EMAIL -->
+            <!-- ================================== -->
+
+            <div class="form-group">
+
+                <label for="email">
+                    อีเมล
+                    <span class="required">*</span>
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="form-input"
+                    placeholder="example@email.com"
+                    maxlength="255"
+                    autocomplete="email"
+                    inputmode="email"
+                    autocapitalize="none"
+                    spellcheck="false"
+                    required
+                >
+
+                <small class="form-hint">
+                    ใช้อีเมลนี้สำหรับเข้าสู่ระบบ
+                </small>
+
+            </div>
+
+            <!-- ================================== -->
+            <!-- PASSWORD -->
+            <!-- ================================== -->
+
+            <div class="form-group">
+
+                <label for="password">
+                    รหัสผ่าน
+                    <span class="required">*</span>
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class="form-input password-input"
+                        placeholder="ตั้งรหัสผ่าน"
+                        minlength="8"
+                        maxlength="72"
+                        autocomplete="new-password"
+                        aria-describedby="passwordHint"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="toggle-password"
+                        data-toggle-password="password"
+                        aria-label="แสดงรหัสผ่าน"
+                        aria-pressed="false"
+                    >
+                        แสดง
+                    </button>
+
+                </div>
+
+                <small
+                    class="form-hint"
+                    id="passwordHint"
+                >
+                    รหัสผ่านต้องมีความยาวอย่างน้อย
+                    8 ตัวอักษร และไม่เกิน 72 ไบต์
+                </small>
+
+            </div>
+
+            <!-- ================================== -->
+            <!-- CONFIRM PASSWORD -->
+            <!-- ================================== -->
+
+            <div class="form-group">
+
+                <label for="confirmPassword">
+                    ยืนยันรหัสผ่าน
+                    <span class="required">*</span>
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirm_password"
+                        class="form-input password-input"
+                        placeholder="กรอกรหัสผ่านอีกครั้ง"
+                        minlength="8"
+                        maxlength="72"
+                        autocomplete="new-password"
+                        aria-describedby="passwordMatchError"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="toggle-password"
+                        data-toggle-password="confirmPassword"
+                        aria-label="แสดงรหัสผ่าน"
+                        aria-pressed="false"
+                    >
+                        แสดง
+                    </button>
+
+                </div>
+
+                <small
+                    class="form-error"
+                    id="passwordMatchError"
+                    role="alert"
+                    hidden
+                >
+                    รหัสผ่านทั้งสองช่องไม่ตรงกัน
+                </small>
+
+            </div>
+
+            <!-- ================================== -->
+            <!-- ACCOUNT ROLE -->
+            <!-- ================================== -->
+
+            <fieldset class="form-group role-fieldset">
+
+                <legend class="role-label">
+                    เลือกประเภทบัญชี
+                    <span class="required">*</span>
+                </legend>
+
+                <p class="form-hint">
+                    เลือกประเภทบัญชีที่ตรงกับการใช้งานของคุณ
+                </p>
+
+                <div class="role-options">
+
+                    <!-- CUSTOMER -->
+                    <label class="role-option">
+
+                        <input
+                            type="radio"
+                            name="role"
+                            value="customer"
+                            required
+                        >
+
+                        <span class="role-card">
+
+                            <span
+                                class="role-icon"
+                                aria-hidden="true"
+                            >
+                                📢
+                            </span>
+
+                            <span class="role-info">
+
+                                <strong>
+                                    ผู้ว่าจ้าง
+                                </strong>
+
+                                <small>
+                                    ลงประกาศงาน
+                                    และเลือกผู้รับงาน
+                                </small>
+
+                            </span>
+
+                        </span>
+
+                    </label>
+
+                    <!-- WORKER -->
+                    <label class="role-option">
+
+                        <input
+                            type="radio"
+                            name="role"
+                            value="worker"
+                            required
+                        >
+
+                        <span class="role-card">
+
+                            <span
+                                class="role-icon"
+                                aria-hidden="true"
+                            >
+                                💼
+                            </span>
+
+                            <span class="role-info">
+
+                                <strong>
+                                    ผู้รับงาน
+                                </strong>
+
+                                <small>
+                                    ค้นหางาน
+                                    และสมัครรับงาน
+                                </small>
+
+                            </span>
+
+                        </span>
+
+                    </label>
+
+                </div>
+
+            </fieldset>
+
+            <!-- ================================== -->
+            <!-- SUBMIT BUTTON -->
+            <!-- ================================== -->
+
+            <button
+                type="submit"
+                class="auth-submit-btn register-btn"
+            >
+                สมัครสมาชิก
+            </button>
+
+        </form>
+
+        <!-- ================================== -->
+        <!-- LOGIN LINK -->
+        <!-- ================================== -->
+
+        <div class="auth-footer">
+
+            <p>
+                มีบัญชีอยู่แล้ว?
+
+                <a href="/login">
+                    เข้าสู่ระบบ
+                </a>
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- ================================== -->
+    <!-- EXTRA INFORMATION -->
+    <!-- ================================== -->
+
+    <div class="auth-info">
+
+        <h2>
+            เริ่มต้นใช้งาน TaskMatch
+        </h2>
+
+        <!-- FREE REGISTRATION -->
+        <div class="auth-info-item">
+
+            <span
+                class="auth-info-icon"
+                aria-hidden="true"
+            >
+                ✓
+            </span>
+
+            <div>
+
+                <h3>
+                    สมัครสมาชิกฟรี
+                </h3>
+
+                <p>
+                    สร้างบัญชีผู้ว่าจ้างหรือผู้รับงาน
+                    ได้โดยไม่เสียค่าใช้จ่าย
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- JOB SEARCH -->
+        <div class="auth-info-item">
+
+            <span
+                class="auth-info-icon"
+                aria-hidden="true"
+            >
+                ✓
+            </span>
+
+            <div>
+
+                <h3>
+                    ค้นหางานได้สะดวก
+                </h3>
+
+                <p>
+                    ดูรายละเอียดงาน
+                    ราคา และกำหนดส่ง
+                    ก่อนตัดสินใจสมัคร
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- JOB MANAGEMENT -->
+        <div class="auth-info-item">
+
+            <span
+                class="auth-info-icon"
+                aria-hidden="true"
+            >
+                ✓
+            </span>
+
+            <div>
+
+                <h3>
+                    จัดการงานในที่เดียว
+                </h3>
+
+                <p>
+                    ติดตามประกาศงาน
+                    และสถานะใบสมัคร
+                    ผ่านบัญชีของคุณ
+                </p>
+
+            </div>
+
+        </div>
+
+        <a
+            href="/"
+            class="back-home-link"
+        >
+            ← กลับไปหน้าตลาดงาน
+        </a>
+
+    </div>
+
+</section>
+
+{{end}}

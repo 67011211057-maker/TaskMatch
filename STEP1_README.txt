@@ -1,0 +1,1 @@
+TaskMatch STEP 1: Remove admin job deletion UI and backend route. Customer delete remains. Approval workflow NOT YET implemented. Do not reimport schema_reference_only.sql into existing database. Back up project and database before replacing files. Run: go run main.go.

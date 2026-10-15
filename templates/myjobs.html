@@ -1,0 +1,525 @@
+
+{{define "content"}}
+
+<!-- ===================================== -->
+<!-- MY JOBS / MY APPLICATIONS PAGE -->
+<!-- ===================================== -->
+
+<section class="my-jobs-section">
+
+    <!-- กลับหน้าตลาดงาน -->
+    <div class="page-navigation">
+        <a href="/" class="back-home-link">
+            ← กลับไปหน้าตลาดงาน
+        </a>
+    </div>
+
+    <!-- ===================================== -->
+    <!-- PAGE HEADER -->
+    <!-- ===================================== -->
+
+    <div class="my-jobs-header">
+
+        <div class="my-jobs-heading">
+
+            <span class="hero-badge">
+                My TaskMatch
+            </span>
+
+            <h1>
+                {{.Title}}
+            </h1>
+
+            {{if .User}}
+
+                {{if eq .User.Role "customer"}}
+
+                    <p class="subtitle">
+                        จัดการประกาศงานของคุณ
+                        ตรวจสอบสถานะงาน
+                        และดูรายชื่อผู้สมัครรับงาน
+                    </p>
+
+                {{else if eq .User.Role "worker"}}
+
+                    <p class="subtitle">
+                        ติดตามงานที่คุณสมัครไว้
+                        และตรวจสอบผลการพิจารณา
+                        จากผู้ว่าจ้าง
+                    </p>
+
+                {{end}}
+
+            {{end}}
+
+        </div>
+
+        <!-- ปุ่มลงประกาศสำหรับผู้ว่าจ้าง -->
+        {{if .User}}
+
+            {{if eq .User.Role "customer"}}
+
+                <a href="/jobs/new"
+                   class="add-btn">
+                    + ลงประกาศงานใหม่
+                </a>
+
+            {{end}}
+
+        {{end}}
+
+    </div>
+
+    <!-- ===================================== -->
+    <!-- SUMMARY -->
+    <!-- ===================================== -->
+
+    <div class="my-jobs-summary">
+
+        <div class="summary-card">
+
+            <span class="summary-label">
+
+                {{if .User}}
+
+                    {{if eq .User.Role "customer"}}
+                        ประกาศงานทั้งหมด
+                    {{else if eq .User.Role "worker"}}
+                        งานที่สมัครทั้งหมด
+                    {{end}}
+
+                {{end}}
+
+            </span>
+
+            <strong class="summary-number">
+                {{len .Jobs}}
+            </strong>
+
+            <span class="summary-description">
+                รายการ
+            </span>
+
+        </div>
+
+    </div>
+
+    <!-- ===================================== -->
+    <!-- JOB LIST -->
+    <!-- ===================================== -->
+
+    <div class="my-jobs-content">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    {{if .User}}
+
+                        {{if eq .User.Role "customer"}}
+                            ประกาศงานของฉัน
+                        {{else if eq .User.Role "worker"}}
+                            รายการงานที่สมัคร
+                        {{end}}
+
+                    {{end}}
+                </h2>
+
+                <p class="section-description">
+                    คลิกที่รายการเพื่อดูรายละเอียดเพิ่มเติม
+                </p>
+
+            </div>
+
+            <span class="job-count">
+                {{len .Jobs}} รายการ
+            </span>
+
+        </div>
+
+        <!-- ===================================== -->
+        <!-- JOB ITEMS -->
+        <!-- ===================================== -->
+
+        {{if .Jobs}}
+
+            <div class="my-jobs-list">
+
+                {{range .Jobs}}
+
+                    <article class="my-job-card">
+
+                        <!-- ข้อมูลหลัก -->
+                        <div class="my-job-main">
+
+                            <div class="my-job-top">
+
+                                <!-- หมวดหมู่งาน -->
+                                <span class="category">
+                                    {{.Category}}
+                                </span>
+
+                                <!-- สถานะหลัก -->
+                                {{if eq .Status "open"}}
+
+                                    <span class="status-badge status-open">
+                                        เปิดรับสมัคร
+                                    </span>
+
+                                {{else if eq .Status "assigned"}}
+
+                                    <span class="status-badge status-assigned">
+                                        มีผู้รับงานแล้ว
+                                    </span>
+
+                                {{else if eq .Status "completed"}}
+
+                                    <span class="status-badge status-completed">
+                                        งานเสร็จสิ้น
+                                    </span>
+
+                                {{else if eq .Status "pending"}}
+
+                                    <span class="status-badge status-pending">
+                                        รอพิจารณา
+                                    </span>
+
+                                {{else if eq .Status "accepted"}}
+
+                                    <span class="status-badge status-accepted">
+                                        ได้รับเลือก
+                                    </span>
+
+                                {{else if eq .Status "rejected"}}
+
+                                    <span class="status-badge status-rejected">
+                                        ไม่ได้รับเลือก
+                                    </span>
+
+                                {{else}}
+
+                                    <span class="status-badge">
+                                        {{.Status}}
+                                    </span>
+
+                                {{end}}
+
+                            </div>
+
+                            <!-- ============================= -->
+                            <!-- ข้อมูลเฉพาะผู้ว่าจ้าง -->
+                            <!-- ============================= -->
+
+                            {{if $.User}}
+
+                                {{if eq $.User.Role "customer"}}
+
+                                    <div class="my-job-details">
+
+                                        <!-- สถานะอนุมัติประกาศ -->
+                                        {{if eq .ApprovalStatus "pending"}}
+
+                                            <span class="status-badge status-pending">
+                                                รอแอดมินอนุมัติ
+                                            </span>
+
+                                        {{else if eq .ApprovalStatus "approved"}}
+
+                                            <span class="status-badge status-accepted">
+                                                อนุมัติแล้ว
+                                            </span>
+
+                                        {{else if eq .ApprovalStatus "rejected"}}
+
+                                            <span class="status-badge status-rejected">
+                                                ไม่ผ่านการอนุมัติ
+                                            </span>
+
+                                        {{end}}
+
+                                        <!-- จำนวนผู้สมัคร -->
+                                        <span class="my-job-id">
+                                            ผู้สมัคร {{.ApplicantCount}} คน
+                                        </span>
+
+                                    </div>
+
+                                <!-- ============================= -->
+                                <!-- ข้อมูลเฉพาะผู้รับงาน -->
+                                <!-- ============================= -->
+
+                                {{else if eq $.User.Role "worker"}}
+
+                                    <div class="my-job-details">
+
+                                        <!-- วันที่สมัคร -->
+                                        <span class="my-job-id">
+                                            สมัครเมื่อ {{.AppliedAt}}
+                                        </span>
+
+                                        <!-- สถานะของงาน -->
+                                        <span class="my-job-id">
+                                            สถานะงาน:
+                                        </span>
+
+                                        {{if eq .JobStatus "open"}}
+
+                                            <span class="status-badge status-open">
+                                                เปิดรับสมัคร
+                                            </span>
+
+                                        {{else if eq .JobStatus "assigned"}}
+
+                                            <span class="status-badge status-assigned">
+                                                มีผู้รับงานแล้ว
+                                            </span>
+
+                                        {{else if eq .JobStatus "completed"}}
+
+                                            <span class="status-badge status-completed">
+                                                งานเสร็จสิ้น
+                                            </span>
+
+                                        {{else}}
+
+                                            <span class="status-badge">
+                                                {{.JobStatus}}
+                                            </span>
+
+                                        {{end}}
+
+                                    </div>
+
+                                {{end}}
+
+                            {{end}}
+
+                            <!-- ชื่องาน -->
+                            <h3 class="my-job-title">
+
+                                <a href="/jobs/{{.ID}}">
+                                    {{.Title}}
+                                </a>
+
+                            </h3>
+
+                            <!-- ค่าจ้างและหมายเลขงาน -->
+                            <div class="my-job-details">
+
+                                <span class="my-job-price">
+                                    ฿{{.Price}}
+                                </span>
+
+                                <span class="my-job-id">
+                                    หมายเลขงาน #{{.ID}}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <!-- ===================================== -->
+                        <!-- ACTIONS -->
+                        <!-- ===================================== -->
+
+                        <div class="my-job-actions">
+
+                            <!-- ดูรายละเอียดงาน -->
+                            <a
+                                href="/jobs/{{.ID}}"
+                                class="secondary-btn"
+                            >
+                                ดูรายละเอียด
+                            </a>
+
+                            <!-- เฉพาะผู้ว่าจ้าง -->
+                            {{if $.User}}
+
+                                {{if eq $.User.Role "customer"}}
+
+                                    {{if eq .Status "open"}}
+
+                                        <!-- แก้ไขงาน -->
+                                        <a
+                                            href="/jobs/{{.ID}}/edit"
+                                            class="edit-btn"
+                                        >
+                                            แก้ไขงาน
+                                        </a>
+
+                                        <!-- ลบงาน -->
+                                        <form
+                                            action="/jobs/{{.ID}}/delete"
+                                            method="post"
+                                            class="inline-form"
+                                        >
+
+                                            <input
+                                                type="hidden"
+                                                name="csrf"
+                                                value="{{$.CSRF}}"
+                                            >
+
+                                            <button
+                                                type="submit"
+                                                class="delete-btn"
+                                                data-confirm="ยืนยันการลบประกาศงานนี้?"
+                                            >
+                                                ลบงาน
+                                            </button>
+
+                                        </form>
+
+                                    {{end}}
+
+                                {{end}}
+
+                            {{end}}
+
+                        </div>
+
+                    </article>
+
+                {{end}}
+
+            </div>
+
+        {{else}}
+
+            <!-- ===================================== -->
+            <!-- EMPTY STATE -->
+            <!-- ===================================== -->
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    📋
+                </div>
+
+                {{if .User}}
+
+                    {{if eq .User.Role "customer"}}
+
+                        <h3>
+                            คุณยังไม่มีประกาศงาน
+                        </h3>
+
+                        <p>
+                            เริ่มต้นลงประกาศงานแรก
+                            เพื่อค้นหาผู้รับงานที่เหมาะสม
+                        </p>
+
+                        <a
+                            href="/jobs/new"
+                            class="add-btn"
+                        >
+                            + ลงประกาศงานแรก
+                        </a>
+
+                    {{else if eq .User.Role "worker"}}
+
+                        <h3>
+                            คุณยังไม่ได้สมัครงาน
+                        </h3>
+
+                        <p>
+                            ไปที่หน้าตลาดงาน
+                            เพื่อค้นหางานที่สนใจ
+                            และเริ่มสมัครรับงาน
+                        </p>
+
+                        <a
+                            href="/"
+                            class="add-btn"
+                        >
+                            ค้นหางาน
+                        </a>
+
+                    {{end}}
+
+                {{end}}
+
+            </div>
+
+        {{end}}
+
+    </div>
+
+    <!-- ===================================== -->
+    <!-- INFORMATION SECTION -->
+    <!-- ===================================== -->
+
+    <div class="my-jobs-help">
+
+        {{if .User}}
+
+            {{if eq .User.Role "customer"}}
+
+                <div class="help-banner">
+
+                    <h2>
+                        จัดการประกาศงานอย่างไร?
+                    </h2>
+
+                    <p>
+                        คุณสามารถเปิดดูรายละเอียดงาน
+                        เพื่อตรวจสอบผู้สมัคร
+                        รับหรือปฏิเสธผู้สมัคร
+                        และยืนยันเมื่องานเสร็จสิ้น
+                    </p>
+
+                    <a
+                        href="/jobs/new"
+                        class="secondary-btn"
+                    >
+                        ลงประกาศเพิ่มเติม
+                    </a>
+
+                </div>
+
+            {{else if eq .User.Role "worker"}}
+
+                <div class="help-banner">
+
+                    <h2>
+                        สถานะใบสมัครหมายถึงอะไร?
+                    </h2>
+
+                    <div class="status-explanation">
+
+                        <p>
+                            <span class="status-badge status-pending">
+                                รอพิจารณา
+                            </span>
+                            ผู้ว่าจ้างยังไม่ได้ตัดสินใจ
+                        </p>
+
+                        <p>
+                            <span class="status-badge status-accepted">
+                                ได้รับเลือก
+                            </span>
+                            ผู้ว่าจ้างเลือกคุณให้ทำงานนี้
+                        </p>
+
+                        <p>
+                            <span class="status-badge status-rejected">
+                                ไม่ได้รับเลือก
+                            </span>
+                            ผู้ว่าจ้างเลือกผู้สมัครรายอื่น
+                            หรือปฏิเสธใบสมัครของคุณ
+                        </p>
+
+                    </div>
+
+                </div>
+
+            {{end}}
+
+        {{end}}
+
+    </div>
+
+</section>
+
+{{end}}

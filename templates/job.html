@@ -1,0 +1,1365 @@
+
+{{define "content"}}
+
+<style>
+/* ==========================================
+   TASKMATCH - MODERN JOB DETAIL
+   Scoped CSS for job.html
+========================================== */
+
+.tm-job-detail {
+  --jd-primary: #5745e8;
+  --jd-primary-dark: #4332c7;
+  --jd-text: #17264b;
+  --jd-muted: #68758f;
+  --jd-border: #e8ebf4;
+  --jd-surface: #ffffff;
+  --jd-soft: #f5f4ff;
+  --jd-shadow: 0 12px 36px rgba(29, 40, 83, .065);
+  color: var(--jd-text);
+  padding: 26px 0 65px;
+}
+
+.tm-job-detail *,
+.tm-job-detail *::before,
+.tm-job-detail *::after {
+  box-sizing: border-box;
+}
+
+.tm-job-detail a {
+  text-decoration: none;
+}
+
+.tm-job-detail button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.tm-job-container {
+  width: min(1320px, calc(100% - 36px));
+  margin: 0 auto;
+}
+
+.tm-job-breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--jd-muted);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.tm-job-breadcrumb a {
+  color: #52617e;
+}
+
+.tm-job-breadcrumb a:hover {
+  color: var(--jd-primary);
+}
+
+.tm-job-breadcrumb .current {
+  color: var(--jd-text);
+  font-weight: 700;
+}
+
+.tm-job-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.9fr) minmax(300px, .9fr);
+  align-items: start;
+  gap: 26px;
+}
+
+.tm-job-main,
+.tm-job-sidebar {
+  min-width: 0;
+}
+
+.tm-job-card {
+  background: var(--jd-surface);
+  border: 1px solid var(--jd-border);
+  border-radius: 18px;
+  box-shadow: var(--jd-shadow);
+  overflow: hidden;
+}
+
+.tm-job-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 36px 38px 34px;
+  background:
+    radial-gradient(circle at 95% 10%, rgba(135, 119, 248, .23) 0 18%, transparent 18.5%),
+    radial-gradient(circle at 82% 90%, rgba(134, 117, 246, .14) 0 24%, transparent 24.5%),
+    linear-gradient(115deg, #fff 3%, #f7f5ff 55%, #e7e2ff 100%);
+}
+
+.tm-job-hero::before {
+  content: "";
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  right: -90px;
+  top: -115px;
+  border-radius: 50%;
+  border: 1px solid rgba(103, 83, 234, .16);
+}
+
+.tm-job-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 75%;
+}
+
+.tm-job-category {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 14px;
+  background: #e9e4ff;
+  color: var(--jd-primary);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.tm-job-title {
+  margin: 22px 0 14px;
+  color: #102044;
+  font-size: clamp(27px, 3vw, 39px);
+  line-height: 1.25;
+  font-weight: 850;
+  overflow-wrap: anywhere;
+}
+
+.tm-job-summary {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #334464;
+  margin: 0 0 23px;
+  overflow-wrap: anywhere;
+}
+
+.tm-job-hero-meta {
+  display: grid;
+  gap: 15px;
+  font-size: 14px;
+  color: #485a7a;
+}
+
+.tm-job-hero-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tm-job-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  background: rgba(255, 255, 255, .82);
+  border-radius: 10px;
+  color: var(--jd-primary);
+  font-size: 17px;
+}
+
+.tm-job-owner-link {
+  color: var(--jd-primary);
+  font-weight: 750;
+}
+
+.tm-job-owner-link:hover {
+  text-decoration: underline;
+}
+
+.tm-job-illustration {
+  position: absolute;
+  right: 22px;
+  bottom: 22px;
+  width: 27%;
+  min-width: 155px;
+  max-width: 235px;
+  opacity: .94;
+  pointer-events: none;
+}
+
+.tm-job-content {
+  padding: 30px 32px 34px;
+}
+
+.tm-job-section-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 20px;
+  font-size: 20px;
+  font-weight: 850;
+  color: #16264a;
+}
+
+.tm-job-section-heading .heading-icon {
+  color: var(--jd-primary);
+  font-size: 23px;
+}
+
+.tm-job-description {
+  color: #3c4a65;
+  line-height: 1.95;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 0 0 25px;
+  font-size: 15px;
+}
+
+.tm-job-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.tm-job-stat {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+  padding: 17px 14px;
+  border-radius: 13px;
+  background: #f6f7fb;
+}
+
+.tm-job-stat-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  border-radius: 12px;
+  background: #eeebff;
+  color: var(--jd-primary);
+  font-size: 22px;
+}
+
+.tm-job-stat-label {
+  color: #69758c;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.tm-job-stat-value {
+  color: #15254a;
+  font-size: 17px;
+  font-weight: 850;
+  overflow-wrap: anywhere;
+}
+
+.tm-job-stat-value.price {
+  color: var(--jd-primary);
+  font-size: 21px;
+}
+
+.tm-job-divider {
+  border: 0;
+  border-top: 1px solid var(--jd-border);
+  margin: 28px 0;
+}
+
+.tm-job-info-note {
+  padding: 15px 17px;
+  border-radius: 11px;
+  background: #f0edff;
+  color: #5544d9;
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.tm-job-side-card {
+  padding: 20px;
+  margin-bottom: 22px;
+}
+
+.tm-job-side-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 850;
+  margin: 0 0 17px;
+}
+
+.tm-job-side-heading .heading-icon {
+  color: var(--jd-primary);
+}
+
+.tm-job-primary-btn,
+.tm-job-secondary-btn,
+.tm-job-danger-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 48px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 800;
+  text-align: center;
+  transition: transform .18s, background .18s, box-shadow .18s;
+}
+
+.tm-job-primary-btn {
+  color: #fff !important;
+  border: 1px solid var(--jd-primary);
+  background: linear-gradient(110deg, #6250ec, #4b38d5);
+}
+
+.tm-job-primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(85, 67, 222, .22);
+}
+
+.tm-job-secondary-btn {
+  color: var(--jd-primary) !important;
+  background: #fff;
+  border: 1px solid #b8afff;
+}
+
+.tm-job-secondary-btn:hover {
+  background: #f6f4ff;
+}
+
+.tm-job-danger-btn {
+  color: #c63c53 !important;
+  background: #fff3f5;
+  border: 1px solid #f1c8d0;
+}
+
+.tm-job-danger-btn:hover {
+  background: #ffe6eb;
+}
+
+.tm-job-full {
+  width: 100%;
+}
+
+.tm-job-action-form {
+  margin: 0;
+}
+
+.tm-job-action-stack {
+  display: grid;
+  gap: 10px;
+}
+
+.tm-job-message {
+  margin-top: 12px;
+  padding: 13px 15px;
+  border-radius: 10px;
+  background: #f1efff;
+  color: #5042b4;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.tm-job-message a {
+  color: #4938d2;
+  font-weight: 800;
+}
+
+.tm-job-message.success {
+  background: #eafaf0;
+  color: #17663b;
+}
+
+.tm-job-message.warning {
+  background: #fff7e8;
+  color: #8b590d;
+}
+
+.tm-job-message.error {
+  background: #fff0f2;
+  color: #aa2c45;
+}
+
+.tm-job-info-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--jd-border);
+  font-size: 14px;
+}
+
+.tm-job-info-row:last-child {
+  border-bottom: 0;
+}
+
+.tm-job-info-label {
+  color: #64718a;
+}
+
+.tm-job-info-value {
+  color: #233454;
+  font-weight: 750;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.tm-job-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.tm-job-status.open {
+  color: #16894c;
+  background: #dcf8e8;
+}
+
+.tm-job-status.assigned {
+  color: #9b680c;
+  background: #fff2cf;
+}
+
+.tm-job-status.completed {
+  color: #52617b;
+  background: #edf0f6;
+}
+
+.tm-job-employer {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.tm-job-avatar {
+  display: grid;
+  place-items: center;
+  width: 55px;
+  height: 55px;
+  flex: 0 0 55px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #e3ddff, #a99bf6);
+  color: #fff;
+  font-size: 29px;
+}
+
+.tm-job-employer-name {
+  font-weight: 850;
+  margin-bottom: 6px;
+  overflow-wrap: anywhere;
+}
+
+.tm-job-employer a {
+  color: var(--jd-primary);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.tm-job-back {
+  margin-top: 8px;
+}
+
+.tm-job-applicants {
+  margin-top: 28px;
+  padding: 27px;
+}
+
+.tm-job-applicants-title {
+  margin: 0 0 19px;
+  font-size: 21px;
+  font-weight: 850;
+}
+
+.tm-job-table-wrap {
+  overflow-x: auto;
+}
+
+.tm-job-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 650px;
+  font-size: 14px;
+}
+
+.tm-job-table th,
+.tm-job-table td {
+  padding: 15px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--jd-border);
+  vertical-align: middle;
+}
+
+.tm-job-table th {
+  background: #f7f6ff;
+  color: #52607b;
+  font-weight: 800;
+}
+
+.tm-job-table td {
+  color: #34445f;
+}
+
+.tm-job-table td a {
+  color: var(--jd-primary);
+  font-weight: 750;
+}
+
+.tm-job-table .tm-job-action-form {
+  display: inline-block;
+  margin: 3px 4px 3px 0;
+}
+
+.tm-job-table .tm-job-primary-btn,
+.tm-job-table .tm-job-secondary-btn {
+  min-height: 36px;
+  padding: 8px 11px;
+  font-size: 12px;
+}
+
+.tm-job-application-status {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.tm-job-application-status.pending {
+  background: #fff4d8;
+  color: #98670d;
+}
+
+.tm-job-application-status.accepted {
+  background: #dff8e9;
+  color: #16844a;
+}
+
+.tm-job-application-status.rejected {
+  background: #ffe7eb;
+  color: #c43e56;
+}
+
+@media (max-width: 1050px) {
+  .tm-job-layout {
+    grid-template-columns: minmax(0, 1fr) 310px;
+    gap: 17px;
+  }
+
+  .tm-job-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .tm-job-detail {
+    padding-top: 12px;
+  }
+
+  .tm-job-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .tm-job-hero {
+    padding: 26px 22px;
+  }
+
+  .tm-job-hero-content {
+    max-width: 100%;
+  }
+
+  .tm-job-illustration {
+    display: none;
+  }
+
+  .tm-job-content {
+    padding: 24px 19px;
+  }
+
+  .tm-job-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .tm-job-side-card {
+    margin-bottom: 15px;
+  }
+
+  .tm-job-applicants {
+    padding: 20px 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tm-job-primary-btn,
+  .tm-job-secondary-btn,
+  .tm-job-danger-btn {
+    transition: none;
+  }
+}
+</style>
+
+<main class="tm-job-detail">
+
+  <div class="tm-job-container">
+
+    <!-- BREADCRUMB -->
+
+    <nav class="tm-job-breadcrumb" aria-label="เส้นทางหน้าเว็บ">
+      <a href="/">⌂ หน้าหลัก</a>
+      <span>›</span>
+      <a href="/">ค้นหางาน</a>
+      <span>›</span>
+      <span>{{.Job.Category}}</span>
+      <span>›</span>
+      <span class="current">{{.Job.Title}}</span>
+    </nav>
+
+    <div class="tm-job-layout">
+
+      <!-- =====================================
+           LEFT: JOB DETAILS
+      ====================================== -->
+
+      <div class="tm-job-main">
+
+        <article class="tm-job-card">
+
+          <!-- HERO -->
+
+          <header class="tm-job-hero">
+
+            <div class="tm-job-hero-content">
+
+              <span class="tm-job-category">
+                {{.Job.Category}}
+              </span>
+
+              <h1 class="tm-job-title">
+                {{.Job.Title}}
+              </h1>
+
+              <p class="tm-job-summary">
+                รายละเอียดประกาศงานและข้อมูลสำหรับผู้สนใจรับงาน
+              </p>
+
+              <div class="tm-job-hero-meta">
+
+                <div class="tm-job-hero-meta-row">
+
+                  <span class="tm-job-icon" aria-hidden="true">♙</span>
+
+                  <span>ผู้ว่าจ้าง:</span>
+
+                  <strong>{{.Job.Owner}}</strong>
+
+                  <a
+                    class="tm-job-owner-link"
+                    href="/profiles/{{.Job.OwnerID}}"
+                  >
+                    ดูโปรไฟล์ ↗
+                  </a>
+
+                </div>
+
+                <div class="tm-job-hero-meta-row">
+
+                  <span class="tm-job-icon" aria-hidden="true">▦</span>
+
+                  <span>
+                    กำหนดส่ง: <strong>{{.Job.Deadline}}</strong>
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- Decorative illustration, not job data -->
+
+            <svg
+              class="tm-job-illustration"
+              viewBox="0 0 240 220"
+              fill="none"
+              aria-hidden="true"
+            >
+
+              <ellipse
+                cx="124"
+                cy="200"
+                rx="104"
+                ry="16"
+                fill="#BDB2F5"
+                opacity=".35"
+              />
+
+              <rect
+                x="64"
+                y="85"
+                width="112"
+                height="102"
+                rx="20"
+                fill="#6A56DF"
+              />
+
+              <path
+                d="M64 110Q120 132 176 110V161Q120 184 64 161Z"
+                fill="#8B78F0"
+              />
+
+              <path
+                d="M90 87V67Q90 45 111 45H129Q150 45 150 67V87"
+                stroke="#5140B7"
+                stroke-width="11"
+                stroke-linecap="round"
+              />
+
+              <rect
+                x="91"
+                y="23"
+                width="28"
+                height="78"
+                rx="9"
+                fill="#C9BEFF"
+                transform="rotate(-13 91 23)"
+              />
+
+              <rect
+                x="136"
+                y="20"
+                width="24"
+                height="82"
+                rx="9"
+                fill="#A99AF8"
+                transform="rotate(13 136 20)"
+              />
+
+              <path
+                d="M181 40L207 184"
+                stroke="#5743C8"
+                stroke-width="10"
+                stroke-linecap="round"
+              />
+
+              <path
+                d="M174 178Q206 164 222 181L225 198Q195 210 170 194Z"
+                fill="#8B78F0"
+              />
+
+              <path
+                d="M26 68L31 80L43 85L31 90L26 102L21 90L9 85L21 80Z"
+                fill="#A392F9"
+              />
+
+              <path
+                d="M208 17L212 27L222 31L212 35L208 45L204 35L194 31L204 27Z"
+                fill="#FFFFFF"
+              />
+
+            </svg>
+
+          </header>
+
+          <!-- DETAILS -->
+
+          <div class="tm-job-content">
+
+            <h2 class="tm-job-section-heading">
+              <span class="heading-icon" aria-hidden="true">▣</span>
+              รายละเอียดงาน
+            </h2>
+
+            <p class="tm-job-description">{{.Job.Description}}</p>
+
+            <!-- STATS -->
+
+            <div class="tm-job-stats">
+
+              <div class="tm-job-stat">
+
+                <span class="tm-job-stat-icon" aria-hidden="true">
+                  ฿
+                </span>
+
+                <div>
+                  <div class="tm-job-stat-label">ค่าจ้าง</div>
+                  <div class="tm-job-stat-value price">
+                    ฿{{.Job.Price}}
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="tm-job-stat">
+
+                <span class="tm-job-stat-icon" aria-hidden="true">
+                  ▦
+                </span>
+
+                <div>
+                  <div class="tm-job-stat-label">กำหนดส่งงาน</div>
+                  <div class="tm-job-stat-value">
+                    {{.Job.Deadline}}
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="tm-job-stat">
+
+                <span class="tm-job-stat-icon" aria-hidden="true">
+                  ♟
+                </span>
+
+                <div>
+                  <div class="tm-job-stat-label">ผู้สมัครทั้งหมด</div>
+                  <div class="tm-job-stat-value">
+                    {{.Job.ApplicantCount}} คน
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+            <hr class="tm-job-divider">
+
+            <h2 class="tm-job-section-heading">
+              <span class="heading-icon" aria-hidden="true">⌖</span>
+              ข้อมูลเพิ่มเติม
+            </h2>
+
+            <div class="tm-job-info-note">
+              ℹ หากต้องการทราบรายละเอียดเพิ่มเติมเกี่ยวกับงาน
+              สามารถดูข้อมูลผู้ว่าจ้างผ่านหน้าโปรไฟล์ได้
+            </div>
+
+            <!-- APPROVAL STATUS FOR OWNER -->
+
+            {{if .IsOwner}}
+
+              {{if eq .Job.ApprovalStatus "pending"}}
+
+                <div class="tm-job-message warning">
+                  ⏳ ประกาศนี้กำลังรอแอดมินอนุมัติ
+                  ผู้รับงานจะยังไม่สามารถสมัครได้
+                </div>
+
+              {{else if eq .Job.ApprovalStatus "rejected"}}
+
+                <div class="tm-job-message error" role="alert">
+                  ✕ ประกาศนี้ไม่ผ่านการอนุมัติ
+                  คุณสามารถแก้ไขประกาศแล้วส่งให้แอดมินตรวจสอบใหม่ได้
+                </div>
+
+              {{else if eq .Job.ApprovalStatus "approved"}}
+
+                <div class="tm-job-message success">
+                  ✓ ประกาศนี้ผ่านการอนุมัติแล้ว
+                </div>
+
+              {{end}}
+
+            {{end}}
+
+          </div>
+
+        </article>
+
+        <!-- =====================================
+             APPLICANTS: OWNER / ADMIN ONLY
+        ====================================== -->
+
+        {{if .User}}
+
+          {{if or .IsOwner (eq .User.Role "admin")}}
+
+            <section class="tm-job-card tm-job-applicants">
+
+              <h2 class="tm-job-applicants-title">
+                ♟ รายชื่อผู้สมัคร ({{.Job.ApplicantCount}})
+              </h2>
+
+              <div class="tm-job-table-wrap">
+
+                <table class="tm-job-table">
+
+                  <thead>
+                    <tr>
+                      <th>ผู้สมัคร</th>
+                      <th>วันที่สมัคร</th>
+                      <th>สถานะ</th>
+                      <th>ดำเนินการ</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    {{range .Applications}}
+
+                      <tr>
+
+                        <td>
+                          <a href="/profiles/{{.WorkerID}}">
+                            {{.Worker}} ↗
+                          </a>
+                        </td>
+
+                        <td>{{.Created}}</td>
+
+                        <td>
+
+                          {{if eq .Status "pending"}}
+
+                            <span class="tm-job-application-status pending">
+                              ● รอพิจารณา
+                            </span>
+
+                          {{else if eq .Status "accepted"}}
+
+                            <span class="tm-job-application-status accepted">
+                              ✓ ได้รับเลือก
+                            </span>
+
+                          {{else if eq .Status "rejected"}}
+
+                            <span class="tm-job-application-status rejected">
+                              ✕ ไม่ได้รับเลือก
+                            </span>
+
+                          {{else}}
+
+                            {{.Status}}
+
+                          {{end}}
+
+                        </td>
+
+                        <td>
+
+                          {{if and
+                            $.IsOwner
+                            (eq $.Job.Status "open")
+                            (eq $.Job.ApprovalStatus "approved")
+                            (eq .Status "pending")
+                          }}
+
+                            <form
+                              class="tm-job-action-form"
+                              action="/jobs/{{$.Job.ID}}/accept"
+                              method="post"
+                            >
+
+                              <input
+                                type="hidden"
+                                name="csrf"
+                                value="{{$.CSRF}}"
+                              >
+
+                              <input
+                                type="hidden"
+                                name="application_id"
+                                value="{{.ID}}"
+                              >
+
+                              <button
+                                class="tm-job-primary-btn"
+                                type="submit"
+                              >
+                                ✓ เลือกผู้รับงาน
+                              </button>
+
+                            </form>
+
+                            <form
+                              class="tm-job-action-form"
+                              action="/jobs/{{$.Job.ID}}/reject"
+                              method="post"
+                            >
+
+                              <input
+                                type="hidden"
+                                name="csrf"
+                                value="{{$.CSRF}}"
+                              >
+
+                              <input
+                                type="hidden"
+                                name="application_id"
+                                value="{{.ID}}"
+                              >
+
+                              <button
+                                class="tm-job-secondary-btn"
+                                type="submit"
+                              >
+                                ปฏิเสธ
+                              </button>
+
+                            </form>
+
+                          {{else}}
+
+                            —
+
+                          {{end}}
+
+                        </td>
+
+                      </tr>
+
+                    {{else}}
+
+                      <tr>
+                        <td colspan="4">
+                          ยังไม่มีผู้สมัครงานนี้
+                        </td>
+                      </tr>
+
+                    {{end}}
+
+                  </tbody>
+
+                </table>
+
+              </div>
+
+            </section>
+
+          {{end}}
+
+        {{end}}
+
+      </div>
+
+      <!-- =====================================
+           RIGHT: SIDEBAR
+      ====================================== -->
+
+      <aside class="tm-job-sidebar">
+
+        <!-- APPLICATION / MANAGEMENT -->
+
+        <section class="tm-job-card tm-job-side-card">
+
+          {{if .User}}
+
+            {{if eq .User.Role "worker"}}
+
+              {{if .Job.Applied}}
+
+                <div class="tm-job-message success">
+                  ✓ คุณสมัครงานนี้แล้ว
+                  <div>
+                    <a href="/my/applications">
+                      ดูสถานะใบสมัคร →
+                    </a>
+                  </div>
+                </div>
+
+              {{else if .CanApply}}
+
+                <form
+                  class="tm-job-action-form"
+                  action="/jobs/{{.Job.ID}}/apply"
+                  method="post"
+                >
+
+                  <input
+                    type="hidden"
+                    name="csrf"
+                    value="{{.CSRF}}"
+                  >
+
+                  <button
+                    class="tm-job-primary-btn tm-job-full"
+                    type="submit"
+                  >
+                    ➤ สมัครรับงานนี้
+                  </button>
+
+                </form>
+
+                <div class="tm-job-message">
+                  สมัครงานนี้ได้ทันทีด้วยบัญชีผู้รับงาน
+                </div>
+
+              {{else}}
+
+                <div class="tm-job-message warning">
+
+                  {{if eq .Job.Status "assigned"}}
+                    งานนี้มีผู้รับงานแล้ว
+
+                  {{else if eq .Job.Status "completed"}}
+                    งานนี้เสร็จสิ้นแล้ว
+
+                  {{else if ne .Job.ApprovalStatus "approved"}}
+                    ประกาศนี้ยังไม่เปิดรับสมัคร
+
+                  {{else}}
+                    ไม่สามารถสมัครงานนี้ได้
+                  {{end}}
+
+                </div>
+
+              {{end}}
+
+            {{else if eq .User.Role "customer"}}
+
+              {{if .IsOwner}}
+
+                <h3 class="tm-job-side-heading">
+                  <span class="heading-icon">⚙</span>
+                  จัดการประกาศ
+                </h3>
+
+                <div class="tm-job-action-stack">
+
+                  {{if eq .Job.Status "open"}}
+
+                    <a
+                      class="tm-job-secondary-btn tm-job-full"
+                      href="/jobs/{{.Job.ID}}/edit"
+                    >
+                      ✎ แก้ไขประกาศ
+                    </a>
+
+                    <form
+                      class="tm-job-action-form"
+                      action="/jobs/{{.Job.ID}}/delete"
+                      method="post"
+                      onsubmit="return confirm('ยืนยันการลบประกาศนี้?');"
+                    >
+
+                      <input
+                        type="hidden"
+                        name="csrf"
+                        value="{{.CSRF}}"
+                      >
+
+                      <button
+                        class="tm-job-danger-btn tm-job-full"
+                        type="submit"
+                      >
+                        ลบประกาศ
+                      </button>
+
+                    </form>
+
+                  {{else if eq .Job.Status "assigned"}}
+
+                    <form
+                      class="tm-job-action-form"
+                      action="/jobs/{{.Job.ID}}/complete"
+                      method="post"
+                    >
+
+                      <input
+                        type="hidden"
+                        name="csrf"
+                        value="{{.CSRF}}"
+                      >
+
+                      <button
+                        class="tm-job-primary-btn tm-job-full"
+                        type="submit"
+                      >
+                        ✓ ยืนยันงานเสร็จสิ้น
+                      </button>
+
+                    </form>
+
+                  {{else if eq .Job.Status "completed"}}
+
+                    <div class="tm-job-message success">
+                      ✓ งานนี้เสร็จสิ้นแล้ว
+                    </div>
+
+                  {{end}}
+
+                </div>
+
+                <div class="tm-job-message">
+                  นี่คือประกาศของคุณ
+                  คุณสามารถตรวจสอบผู้สมัครได้ในส่วนรายชื่อผู้สมัคร
+                </div>
+
+              {{else}}
+
+                <div class="tm-job-message">
+                  คุณกำลังดูงานในฐานะผู้ว่าจ้าง
+                  บัญชีผู้ว่าจ้างไม่สามารถสมัครรับงานได้
+                </div>
+
+              {{end}}
+
+            {{else if eq .User.Role "admin"}}
+
+              <div class="tm-job-message">
+                คุณกำลังดูประกาศในฐานะผู้ดูแลระบบ
+              </div>
+
+            {{end}}
+
+          {{else}}
+
+            {{if and
+              (eq .Job.Status "open")
+              (eq .Job.ApprovalStatus "approved")
+            }}
+
+              <a
+                href="/login"
+                class="tm-job-primary-btn tm-job-full"
+              >
+                เข้าสู่ระบบเพื่อสมัครงาน
+              </a>
+
+              <div class="tm-job-message">
+                เข้าสู่ระบบด้วยบัญชีผู้รับงานเพื่อสมัครงานนี้
+              </div>
+
+            {{else}}
+
+              <div class="tm-job-message warning">
+                ประกาศนี้ยังไม่เปิดรับสมัคร
+              </div>
+
+            {{end}}
+
+          {{end}}
+
+        </section>
+
+        <!-- JOB INFORMATION -->
+
+        <section class="tm-job-card tm-job-side-card">
+
+          <h3 class="tm-job-side-heading">
+            <span class="heading-icon" aria-hidden="true">▣</span>
+            ข้อมูลงาน
+          </h3>
+
+          <div class="tm-job-info-row">
+
+            <span class="tm-job-info-label">หมวดหมู่</span>
+
+            <span class="tm-job-info-value">
+              <span class="tm-job-category">
+                {{.Job.Category}}
+              </span>
+            </span>
+
+          </div>
+
+          <div class="tm-job-info-row">
+
+            <span class="tm-job-info-label">สถานะ</span>
+
+            <span class="tm-job-info-value">
+
+              {{if eq .Job.Status "open"}}
+
+                <span class="tm-job-status open">
+                  ● เปิดรับสมัคร
+                </span>
+
+              {{else if eq .Job.Status "assigned"}}
+
+                <span class="tm-job-status assigned">
+                  ● มีผู้รับงานแล้ว
+                </span>
+
+              {{else if eq .Job.Status "completed"}}
+
+                <span class="tm-job-status completed">
+                  ✓ งานเสร็จสิ้น
+                </span>
+
+              {{else}}
+
+                {{.Job.Status}}
+
+              {{end}}
+
+            </span>
+
+          </div>
+
+          <div class="tm-job-info-row">
+
+            <span class="tm-job-info-label">กำหนดส่งงาน</span>
+
+            <span class="tm-job-info-value">
+              {{.Job.Deadline}}
+            </span>
+
+          </div>
+
+          <div class="tm-job-info-row">
+
+            <span class="tm-job-info-label">ผู้สมัครทั้งหมด</span>
+
+            <span class="tm-job-info-value">
+              {{.Job.ApplicantCount}} คน
+            </span>
+
+          </div>
+
+        </section>
+
+        <!-- EMPLOYER -->
+
+        <section class="tm-job-card tm-job-side-card">
+
+          <h3 class="tm-job-side-heading">
+            <span class="heading-icon" aria-hidden="true">▣</span>
+            ผู้ว่าจ้าง
+          </h3>
+
+          <div class="tm-job-employer">
+
+            <div class="tm-job-avatar" aria-hidden="true">
+              ♙
+            </div>
+
+            <div>
+
+              <div class="tm-job-employer-name">
+                {{.Job.Owner}}
+              </div>
+
+              <a href="/profiles/{{.Job.OwnerID}}">
+                ดูโปรไฟล์ ↗
+              </a>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- BACK -->
+
+        <a
+          href="/"
+          class="tm-job-secondary-btn tm-job-full tm-job-back"
+        >
+          ← กลับไปหน้าตลาดงาน
+        </a>
+
+      </aside>
+
+    </div>
+
+  </div>
+
+</main>
+
+{{end}}

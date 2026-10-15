@@ -1,0 +1,496 @@
+
+{{define "content"}}
+
+<!-- ==========================================
+     TASKMATCH - MODERN PROFILE PAGE
+========================================== -->
+
+<section class="tm-profile-dashboard">
+
+    <div class="tm-profile-dashboard-container">
+
+        <!-- BACK NAVIGATION -->
+        <div class="tm-profile-dashboard-back">
+            <a href="/">
+                ← กลับไปหน้าตลาดงาน
+            </a>
+        </div>
+
+        <!-- MAIN PROFILE CARD -->
+        <div class="tm-profile-dashboard-card">
+
+            <!-- ==================================
+                 PROFILE HEADER
+            ================================== -->
+
+            <div class="tm-profile-dashboard-header">
+
+                <!-- AVATAR -->
+                <div class="tm-profile-dashboard-avatar">
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        aria-hidden="true"
+                    >
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M3 21a9 9 0 0 1 18 0z"/>
+                    </svg>
+                </div>
+
+                <!-- IDENTITY -->
+                <div class="tm-profile-dashboard-identity">
+
+                    <div class="tm-profile-dashboard-name-row">
+
+                        <h1>{{.Profile.Name}}</h1>
+
+                        <span class="tm-profile-dashboard-role">
+
+                            {{if eq .Profile.Role "customer"}}
+                                ผู้ว่าจ้าง
+                            {{else if eq .Profile.Role "worker"}}
+                                ผู้รับงาน
+                            {{else if eq .Profile.Role "admin"}}
+                                ผู้ดูแลระบบ
+                            {{else}}
+                                สมาชิก
+                            {{end}}
+
+                        </span>
+
+                    </div>
+
+                    <!-- SHORT DESCRIPTION -->
+                    <p class="tm-profile-dashboard-subtitle">
+
+                        {{if .Profile.Bio}}
+                            {{.Profile.Bio}}
+                        {{else}}
+                            ยังไม่ได้เขียนคำแนะนำตัว
+                        {{end}}
+
+                    </p>
+
+                    <!-- LOCATION -->
+                    <div class="tm-profile-dashboard-location">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/>
+                            <circle cx="12" cy="10" r="2.5"/>
+                        </svg>
+
+                        <span>
+
+                            {{if or .Profile.District .Profile.Province}}
+
+                                {{if .Profile.District}}
+                                    {{.Profile.District}}
+                                {{end}}
+
+                                {{if and .Profile.District .Profile.Province}}
+                                    ,
+                                {{end}}
+
+                                {{if .Profile.Province}}
+                                    {{.Profile.Province}}
+                                {{end}}
+
+                            {{else}}
+                                ยังไม่ได้ระบุพื้นที่
+                            {{end}}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <!-- HEADER ACTIONS -->
+                <div class="tm-profile-dashboard-header-actions">
+
+                    {{if .IsMyProfile}}
+
+                        <a
+                            href="/profile/edit"
+                            class="tm-profile-dashboard-edit-btn"
+                        >
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M12 20h9"/>
+                                <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L9 17l-4 1 1-4Z"/>
+                            </svg>
+
+                            แก้ไขข้อมูลโปรไฟล์
+                        </a>
+
+                    {{end}}
+
+                    <a
+                        href="/"
+                        class="tm-profile-dashboard-home-btn"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="m12 19-7-7 7-7"/>
+                            <path d="M19 12H5"/>
+                        </svg>
+
+                        กลับหน้าหลัก
+                    </a>
+
+                </div>
+
+            </div>
+
+            <!-- ==================================
+                 INFORMATION GRID
+            ================================== -->
+
+            <div class="tm-profile-dashboard-grid">
+
+                <!-- ==================================
+                     PERSONAL INFORMATION
+                ================================== -->
+
+                <div class="tm-profile-info-card">
+
+                    <div class="tm-profile-info-heading">
+
+                        <span class="tm-profile-info-icon">
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <circle cx="12" cy="8" r="4"/>
+                                <path d="M4 21a8 8 0 0 1 16 0"/>
+                            </svg>
+                        </span>
+
+                        <h2>ข้อมูลส่วนตัว</h2>
+
+                    </div>
+
+                    <div class="tm-profile-info-content">
+
+                        <div class="tm-profile-info-row">
+                            <span>ชื่อสมาชิก</span>
+                            <strong>{{.Profile.Name}}</strong>
+                        </div>
+
+                        <div class="tm-profile-info-row">
+                            <span>ประเภทบัญชี</span>
+
+                            <strong>
+                                {{if eq .Profile.Role "customer"}}
+                                    ผู้ว่าจ้าง
+                                {{else if eq .Profile.Role "worker"}}
+                                    ผู้รับงาน
+                                {{else if eq .Profile.Role "admin"}}
+                                    ผู้ดูแลระบบ
+                                {{else}}
+                                    สมาชิก
+                                {{end}}
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ==================================
+                     OCCUPATION
+                ================================== -->
+
+                <div class="tm-profile-info-card">
+
+                    <div class="tm-profile-info-heading">
+
+                        <span class="tm-profile-info-icon">
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <rect x="3" y="7" width="18" height="14" rx="2"/>
+                                <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                <path d="M3 12h18"/>
+                            </svg>
+                        </span>
+
+                        <h2>ข้อมูลการทำงาน</h2>
+
+                    </div>
+
+                    <div class="tm-profile-info-content">
+
+                        <div class="tm-profile-info-row">
+                            <span>อาชีพปัจจุบัน</span>
+
+                            <strong>
+                                {{if .Profile.Occupation}}
+                                    {{.Profile.Occupation}}
+                                {{else}}
+                                    ยังไม่ระบุ
+                                {{end}}
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ==================================
+                     CONTACT INFORMATION
+                ================================== -->
+
+                <div class="tm-profile-info-card">
+
+                    <div class="tm-profile-info-heading">
+
+                        <span class="tm-profile-info-icon">
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M22 16.9v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7l.5 3a2 2 0 0 1-.6 1.7L7.1 10a16 16 0 0 0 6.9 6.9l1.6-1.9a2 2 0 0 1 1.7-.6l3 .5a2 2 0 0 1 1.7 2z"/>
+                            </svg>
+                        </span>
+
+                        <h2>ข้อมูลการติดต่อ</h2>
+
+                    </div>
+
+                    <div class="tm-profile-info-content">
+
+                        {{if .IsMyProfile}}
+
+                            <div class="tm-profile-info-row">
+                                <span>เบอร์โทรศัพท์</span>
+
+                                <strong>
+                                    {{if .Profile.Phone}}
+                                        {{.Profile.Phone}}
+                                    {{else}}
+                                        ยังไม่ระบุ
+                                    {{end}}
+                                </strong>
+                            </div>
+
+                            <p class="tm-profile-info-privacy">
+                                ข้อมูลส่วนตัว — ไม่แสดงในหน้าโปรไฟล์สาธารณะ
+                            </p>
+
+                        {{else}}
+
+                            <p class="tm-profile-info-privacy">
+                                เบอร์โทรศัพท์เป็นข้อมูลส่วนตัว
+                                ไม่แสดงในหน้าโปรไฟล์สาธารณะ
+                            </p>
+
+                        {{end}}
+
+                    </div>
+
+                </div>
+
+                <!-- ==================================
+                     LOCATION
+                ================================== -->
+
+                <div class="tm-profile-info-card">
+
+                    <div class="tm-profile-info-heading">
+
+                        <span class="tm-profile-info-icon">
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/>
+                                <circle cx="12" cy="10" r="2.5"/>
+                            </svg>
+                        </span>
+
+                        <h2>ที่อยู่ / พื้นที่ให้บริการ</h2>
+
+                    </div>
+
+                    <div class="tm-profile-info-content">
+
+                        <div class="tm-profile-info-row">
+                            <span>จังหวัด</span>
+
+                            <strong>
+                                {{if .Profile.Province}}
+                                    {{.Profile.Province}}
+                                {{else}}
+                                    ยังไม่ระบุ
+                                {{end}}
+                            </strong>
+                        </div>
+
+                        <div class="tm-profile-info-row">
+                            <span>อำเภอ</span>
+
+                            <strong>
+                                {{if .Profile.District}}
+                                    {{.Profile.District}}
+                                {{else}}
+                                    ยังไม่ระบุ
+                                {{end}}
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ==================================
+                     SKILLS: WORKER ONLY
+                ================================== -->
+
+                {{if eq .Profile.Role "worker"}}
+
+                    <div class="tm-profile-info-card">
+
+                        <div class="tm-profile-info-heading">
+
+                            <span class="tm-profile-info-icon">
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <path d="m12 2 3.1 6.3 7 1-5.1 5 1.2 7-6.2-3.3-6.2 3.3 1.2-7-5.1-5 7-1z"/>
+                                </svg>
+                            </span>
+
+                            <h2>ทักษะ / ความถนัด</h2>
+
+                        </div>
+
+                        <div class="tm-profile-info-content">
+
+                            <div class="tm-profile-info-row">
+                                <span>ทักษะของคุณ</span>
+
+                                <strong>
+                                    {{if .Profile.Skills}}
+                                        {{.Profile.Skills}}
+                                    {{else}}
+                                        ยังไม่ระบุ
+                                    {{end}}
+                                </strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {{end}}
+
+                <!-- ==================================
+                     BIO
+                ================================== -->
+
+                <div class="tm-profile-info-card">
+
+                    <div class="tm-profile-info-heading">
+
+                        <span class="tm-profile-info-icon">
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8A8.5 8.5 0 0 1 12.5 20a8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 12.5 3 8.5 8.5 0 0 1 21 11.5Z"/>
+                            </svg>
+                        </span>
+
+                        <h2>เกี่ยวกับฉัน</h2>
+
+                    </div>
+
+                    <div class="tm-profile-info-content">
+
+                        <div class="tm-profile-info-bio">
+
+                            {{if .Profile.Bio}}
+
+                                {{.Profile.Bio}}
+
+                            {{else}}
+
+                                {{if .IsMyProfile}}
+                                    คุณยังไม่ได้เขียนข้อความแนะนำตัว
+                                    สามารถเพิ่มข้อมูลได้โดยกดแก้ไขโปรไฟล์
+                                {{else}}
+                                    ผู้ใช้งานยังไม่ได้เขียนข้อความแนะนำตัว
+                                {{end}}
+
+                            {{end}}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{{end}}

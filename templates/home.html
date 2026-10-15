@@ -1,0 +1,583 @@
+
+{{define "content"}}
+
+<!-- ==========================================
+     TASKMATCH - DATABASE JOB MARKETPLACE
+========================================== -->
+
+<section class="tm-marketplace">
+
+    <div class="tm-marketplace-container">
+
+        <!-- =====================================
+             HERO SECTION
+        ====================================== -->
+
+        <header class="tm-marketplace-hero">
+
+            <div class="tm-marketplace-hero-content">
+
+                <span class="tm-marketplace-eyebrow">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                    >
+                        <rect
+                            x="3"
+                            y="7"
+                            width="18"
+                            height="14"
+                            rx="2"
+                        />
+                        <path
+                            d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                        />
+                    </svg>
+
+                    ค้นหางานที่ใช่สำหรับคุณ
+
+                </span>
+
+                <h1>
+                    ค้นหางานที่
+                    <span>เหมาะกับคุณ</span>
+                </h1>
+
+                <p class="tm-marketplace-subtitle">
+                    งานเล็ก ๆ หาคนทำได้ง่าย ๆ
+                    สร้างโอกาส สร้างรายได้ ไปกับ TaskMatch
+                </p>
+
+                <!-- SEARCH FORM -->
+
+                <form
+                    class="tm-marketplace-search"
+                    action="/"
+                    method="get"
+                    role="search"
+                >
+
+                    <div class="tm-marketplace-search-field">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <circle
+                                cx="11"
+                                cy="11"
+                                r="7"
+                            />
+                            <path d="m20 20-4-4"/>
+                        </svg>
+
+                        <input
+                            type="search"
+                            id="tmJobSearch"
+                            name="q"
+                            value="{{.Search}}"
+                            placeholder="ค้นหางานที่สนใจ..."
+                            aria-label="ค้นหางาน"
+                            autocomplete="off"
+                            maxlength="100"
+                        >
+
+                    </div>
+
+                    <!-- เก็บหมวดหมู่เมื่อค้นหาข้อความ -->
+                    {{if gt .SelectedCategoryID 0}}
+
+                        <input
+                            type="hidden"
+                            name="category_id"
+                            value="{{.SelectedCategoryID}}"
+                        >
+
+                    {{end}}
+
+                    <button
+                        type="submit"
+                        class="tm-marketplace-search-btn"
+                    >
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <circle
+                                cx="11"
+                                cy="11"
+                                r="7"
+                            />
+                            <path d="m20 20-4-4"/>
+                        </svg>
+
+                        ค้นหา
+
+                    </button>
+
+                </form>
+
+                <!-- SEARCH STATUS -->
+
+                {{if .Search}}
+
+                    <div class="tm-marketplace-search-clear">
+
+                        <span>
+                            กำลังค้นหา:
+                            <strong>{{.Search}}</strong>
+                        </span>
+
+                        <a href="/">
+                            ล้างตัวกรองทั้งหมด
+                        </a>
+
+                    </div>
+
+                {{else if gt .SelectedCategoryID 0}}
+
+                    <div class="tm-marketplace-search-clear">
+
+                        <span>
+                            กำลังแสดงงานตามหมวดหมู่ที่เลือก
+                        </span>
+
+                        <a href="/">
+                            ล้างตัวกรอง
+                        </a>
+
+                    </div>
+
+                {{end}}
+
+            </div>
+
+            <!-- HERO ART -->
+
+            <div
+                class="tm-marketplace-hero-art"
+                aria-hidden="true"
+            >
+
+                <div class="tm-marketplace-art-circle">
+
+                    <svg
+                        viewBox="0 0 300 260"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+
+                        <circle
+                            cx="150"
+                            cy="130"
+                            r="115"
+                            fill="#EAE8FF"
+                        />
+
+                        <rect
+                            x="78"
+                            y="70"
+                            width="145"
+                            height="112"
+                            rx="16"
+                            fill="#FFFFFF"
+                        />
+
+                        <rect
+                            x="78"
+                            y="70"
+                            width="145"
+                            height="30"
+                            rx="16"
+                            fill="#6558E8"
+                        />
+
+                        <circle
+                            cx="98"
+                            cy="85"
+                            r="4"
+                            fill="#FFFFFF"
+                        />
+
+                        <circle
+                            cx="111"
+                            cy="85"
+                            r="4"
+                            fill="#FFFFFF"
+                        />
+
+                        <rect
+                            x="98"
+                            y="116"
+                            width="80"
+                            height="9"
+                            rx="4"
+                            fill="#DCD8FF"
+                        />
+
+                        <rect
+                            x="98"
+                            y="136"
+                            width="104"
+                            height="9"
+                            rx="4"
+                            fill="#E7EAF5"
+                        />
+
+                        <rect
+                            x="98"
+                            y="156"
+                            width="67"
+                            height="9"
+                            rx="4"
+                            fill="#E7EAF5"
+                        />
+
+                        <circle
+                            cx="209"
+                            cy="173"
+                            r="38"
+                            fill="#4F46E5"
+                        />
+
+                        <path
+                            d="m191 173 12 12 24-26"
+                            stroke="#FFFFFF"
+                            stroke-width="9"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                        <circle
+                            cx="70"
+                            cy="173"
+                            r="23"
+                            fill="#B8B2FF"
+                        />
+
+                        <path
+                            d="M62 173h16M70 165v16"
+                            stroke="#FFFFFF"
+                            stroke-width="5"
+                            stroke-linecap="round"
+                        />
+
+                    </svg>
+
+                </div>
+
+                <div class="tm-marketplace-floating-label">
+                    ✨ งานมากมายรอคุณอยู่
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- =====================================
+             DATABASE CATEGORY FILTERS
+        ====================================== -->
+
+        <nav
+            class="tm-marketplace-categories"
+            aria-label="กรองงานตามหมวดหมู่"
+        >
+
+            <!-- ALL JOBS -->
+
+            <a
+                href="{{if .Search}}/?q={{urlquery .Search}}{{else}}/{{end}}"
+                class="tm-marketplace-category{{if eq .SelectedCategoryID 0}} is-active{{end}}"
+                {{if eq .SelectedCategoryID 0}}
+                    aria-current="page"
+                {{end}}
+            >
+                ทั้งหมด
+            </a>
+
+            <!-- CATEGORIES FROM MYSQL -->
+
+            {{range .Categories}}
+
+                <a
+                    href="/?category_id={{.ID}}{{if $.Search}}&amp;q={{urlquery $.Search}}{{end}}"
+                    class="tm-marketplace-category{{if eq $.SelectedCategoryID .ID}} is-active{{end}}"
+                    {{if eq $.SelectedCategoryID .ID}}
+                        aria-current="page"
+                    {{end}}
+                >
+
+                    {{.Name}}
+
+                </a>
+
+            {{end}}
+
+        </nav>
+
+        <!-- =====================================
+             JOB LIST HEADING
+        ====================================== -->
+
+        <div class="tm-marketplace-list-header">
+
+            <div class="tm-marketplace-list-heading">
+
+                <h2>
+
+                    {{if .Search}}
+
+                        ผลการค้นหางาน
+
+                    {{else if gt .SelectedCategoryID 0}}
+
+                        งานในหมวดหมู่ที่เลือก
+
+                    {{else}}
+
+                        งานทั้งหมด
+
+                    {{end}}
+
+                </h2>
+
+                <span
+                    class="tm-marketplace-count"
+                    id="tmMarketplaceJobCount"
+                >
+                    {{len .Jobs}} งาน
+                </span>
+
+            </div>
+
+            <div class="tm-marketplace-list-tools">
+                <span>งานที่เปิดรับสมัคร</span>
+            </div>
+
+        </div>
+
+        <!-- =====================================
+             JOB GRID FROM MYSQL
+        ====================================== -->
+
+        {{if .Jobs}}
+
+            <div
+                class="tm-marketplace-grid"
+                id="tmJobGrid"
+            >
+
+                {{range .Jobs}}
+
+                    <article
+                        class="tm-marketplace-card"
+                        data-job-category-id="{{.CategoryID}}"
+                    >
+
+                        <!-- CARD COVER -->
+
+                        <div class="tm-marketplace-card-image">
+
+                            <span class="tm-marketplace-card-image-brand">
+                                TaskMatch
+                            </span>
+
+                            <span class="tm-marketplace-card-category">
+                                {{.Category}}
+                            </span>
+
+                        </div>
+
+                        <!-- CARD CONTENT -->
+
+                        <div class="tm-marketplace-card-body">
+
+                            <h3 class="tm-marketplace-card-title">
+
+                                <a href="/jobs/{{.ID}}">
+                                    {{.Title}}
+                                </a>
+
+                            </h3>
+
+                            <p class="tm-marketplace-card-description">
+                                {{.Description}}
+                            </p>
+
+                            <div class="tm-marketplace-card-meta">
+
+                                <strong class="tm-marketplace-card-price">
+                                    ฿{{.Price}}
+                                </strong>
+
+                                <span class="tm-marketplace-card-date">
+
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        aria-hidden="true"
+                                    >
+                                        <rect
+                                            x="3"
+                                            y="5"
+                                            width="18"
+                                            height="16"
+                                            rx="2"
+                                        />
+                                        <path
+                                            d="M7 3v4M17 3v4M3 10h18"
+                                        />
+                                    </svg>
+
+                                    {{.Deadline}}
+
+                                </span>
+
+                            </div>
+
+                            <!-- VIEW DETAILS -->
+
+                            <a
+                                class="tm-marketplace-card-link"
+                                href="/jobs/{{.ID}}"
+                            >
+
+                                {{if $.User}}
+
+                                    {{if eq $.User.Role "worker"}}
+
+                                        ดูรายละเอียดและสมัครงาน
+
+                                    {{else}}
+
+                                        ดูรายละเอียดงาน
+
+                                    {{end}}
+
+                                {{else}}
+
+                                    ดูรายละเอียดงาน
+
+                                {{end}}
+
+                                <span aria-hidden="true">→</span>
+
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                {{end}}
+
+            </div>
+
+        {{else}}
+
+            <!-- =====================================
+                 EMPTY STATE
+            ====================================== -->
+
+            <div class="tm-marketplace-empty">
+
+                <div
+                    class="tm-marketplace-empty-icon"
+                    aria-hidden="true"
+                >
+                    🔎
+                </div>
+
+                {{if or .Search (gt .SelectedCategoryID 0)}}
+
+                    <h3>
+                        ไม่พบงานที่ตรงกับเงื่อนไข
+                    </h3>
+
+                    <p>
+                        ลองเปลี่ยนคำค้นหา
+                        หรือเลือกหมวดหมู่อื่น
+                    </p>
+
+                    <a
+                        href="/"
+                        class="tm-marketplace-empty-btn"
+                    >
+                        ดูงานทั้งหมด
+                    </a>
+
+                {{else}}
+
+                    <h3>
+                        ยังไม่มีประกาศงาน
+                    </h3>
+
+                    <p>
+                        ขณะนี้ยังไม่มีงานที่เปิดรับสมัคร
+                        และผ่านการอนุมัติ
+                    </p>
+
+                    {{if .User}}
+
+                        {{if eq .User.Role "customer"}}
+
+                            <a
+                                href="/jobs/new"
+                                class="tm-marketplace-empty-btn"
+                            >
+                                + ประกาศงาน
+                            </a>
+
+                        {{else if eq .User.Role "worker"}}
+
+                            <a
+                                href="/my/applications"
+                                class="tm-marketplace-empty-btn"
+                            >
+                                ดูงานที่ฉันสมัคร
+                            </a>
+
+                        {{end}}
+
+                    {{else}}
+
+                        <a
+                            href="/register"
+                            class="tm-marketplace-empty-btn"
+                        >
+                            สมัครสมาชิก
+                        </a>
+
+                    {{end}}
+
+                {{end}}
+
+            </div>
+
+        {{end}}
+
+    </div>
+
+</section>
+
+{{end}}
